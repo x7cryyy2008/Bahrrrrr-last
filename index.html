@@ -1,0 +1,752 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#06193A">
+<meta name="bahr-version" content="0.2.0">
+<link rel="icon" type="image/png" sizes="64x64" href="favicon.png">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png">
+<link rel="apple-touch-icon" sizes="512x512" href="icon-512.png">
+<meta name="color-scheme" content="light">
+<title>بحر | BAHR — قوارب ومحركات وجت سكي وقطع غيار وخدمات بحرية في العراق</title>
+<meta name="description" content="بحر BAHR منصة عراقية للبحث عن القوارب والمحركات والجت سكي والجاكبوت وقطع الغيار والخدمات البحرية، مع إعلانات وتواصل مباشر في مكان واحد.">
+<meta name="robots" content="index,follow,max-image-preview:large">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="بحر | BAHR">
+<meta property="og:locale" content="ar_IQ">
+<meta property="og:title" content="بحر | BAHR — القوارب والمحركات والجت سكي والخدمات البحرية في العراق">
+<meta property="og:description" content="منصة عراقية للقوارب والمحركات والجت سكي والجاكبوت وقطع الغيار والخدمات البحرية.">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="بحر | BAHR — البحر يجمعنا">
+<meta name="twitter:description" content="منصة عراقية للقوارب والمحركات والجت سكي وقطع الغيار والخدمات البحرية.">
+<!-- ADM18: canonical وog:url وog:image والبيانات المنظمة وعناوين الصفحات حسب المسار تُضاف من seo.js -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Readex+Pro:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<!-- ============ إعدادات Supabase (من B1، دون تغيير) ============
+     الرابط والمفتاح العام (anon) فقط. لا تضع مفتاح service_role هنا أبدًا. -->
+
+
+
+<!-- ============ صور المنصة: ضع رابط صورة الغلاف هنا لاستبدال المكان المؤقت ============ -->
+<!-- ============ B12: بيانات مركز المساعدة (ثابتة) ============
+  لإضافة مقال جديد: انسخ أي عنصر داخل arts وغيّر id (حروف إنجليزية صغيرة وأرقام وشرطات فقط) ثم c (معرّف التصنيف)
+  وt العنوان وs الملخص وimg الصورة (اتركها '' لعرض أيقونة التصنيف) وcap وصف الصورة وdate وtags كلمات للبحث.
+  b هو المحتوى: ['h','عنوان فرعي'] ['p','فقرة'] ['ul',['بند','بند']] ['note','تنبيه'] ['dl',[['مصطلح','تعريف']]]
+  لإضافة تصنيف جديد: أضف عنصراً إلى cats (id, t, d, ic) — ic اسم أيقونة موجودة: jetski boat engine parts wrench shield search tech.
+  لا حاجة لتعديل أي كود آخر: الصفحة الرئيسية للمركز والبحث وصفحات المقالات تُبنى تلقائياً من هذه البيانات. -->
+
+
+<!-- 1) إعداد Supabase (يُحمَّل أولاً) -->
+<script src="supabase-config.js"></script>
+<!-- 2) مكتبة Supabase عبر CDN -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js" defer></script>
+<!-- 3) التصاميم -->
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="b7-addons.css">
+<link rel="stylesheet" href="bottom-nav.css">
+<script src="seo.js" defer></script>
+
+
+
+<link rel="stylesheet" href="b22-livegps.css">
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+<symbol id="i-boat" viewBox="0 0 24 24"><path d="M3 16h18l-2.5 4h-13z"/><path d="M12 3v10"/><path d="M12 4l6 8h-6"/></symbol>
+<symbol id="i-jetski" viewBox="0 0 24 24"><path d="M2 16c2 0 3-2 6-2h8c3 0 4 2 6 2l-1 3H4z"/><path d="M9 14l1-4h4l2 4"/><path d="M12 10V7h3"/></symbol>
+<symbol id="i-engine" viewBox="0 0 24 24"><rect x="8" y="3" width="7" height="6" rx="1"/><path d="M11.5 9v8"/><path d="M8 17h7"/><path d="M9.5 17v4M13.5 17v4"/></symbol>
+<symbol id="i-parts" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3.5"/><path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M18.4 5.6l-2.1 2.1M7.7 16.3l-2.1 2.1"/></symbol>
+<symbol id="i-wrench" viewBox="0 0 24 24"><path d="M21 7a5 5 0 01-7 4.6L6 19.5a2 2 0 01-3-3l7.9-8A5 5 0 0116.5 3L13 6.5l1 3 3 1z"/></symbol>
+<symbol id="i-tech" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/><circle cx="12" cy="10" r="2"/></symbol>
+<symbol id="i-user" viewBox="0 0 24 24"><circle cx="12" cy="8" r="3.5"/><path d="M5 21c0-4 3-7 7-7s7 3 7 7"/></symbol>
+<symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.5"/><path d="M20 20l-4.5-4.5"/></symbol>
+<symbol id="i-chat" viewBox="0 0 24 24"><path d="M4 5h16v11H9l-5 4z"/></symbol>
+<symbol id="i-hand" viewBox="0 0 24 24"><path d="M3 12l5-4 4 2 4-2 5 4-6 6-3-1-3 1z"/></symbol>
+<symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"/><path d="M8.5 12l2.5 2.5 4.5-5"/></symbol>
+<symbol id="i-truck" viewBox="0 0 24 24"><path d="M2 6h12v10H2zM14 10h4l3 3v3h-7"/><circle cx="7" cy="17" r="2"/><circle cx="17" cy="17" r="2"/></symbol>
+<symbol id="i-pin" viewBox="0 0 24 24"><path d="M12 21s-6-5.5-6-11a6 6 0 1112 0c0 5.5-6 11-6 11z"/><circle cx="12" cy="10" r="2"/></symbol>
+<symbol id="i-arrow" viewBox="0 0 24 24"><path d="M19 12H5M11 6l-6 6 6 6"/></symbol>
+<symbol id="i-plus" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="M12 8v8M8 12h8"/></symbol>
+<symbol id="i-play" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M10 8.5l5 3.5-5 3.5z"/></symbol>
+<symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></symbol>
+<symbol id="i-eye" viewBox="0 0 24 24"><path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></symbol>
+<symbol id="i-eyeoff" viewBox="0 0 24 24"><path d="M3 3l18 18M10.6 6.2A9.6 9.6 0 0112 6c6 0 10 6 10 6a17 17 0 01-3.2 3.8M6.6 7.6A17 17 0 002 12s4 7 10 7a9.5 9.5 0 004-.9"/></symbol>
+<symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></symbol>
+<symbol id="i-heart" viewBox="0 0 24 24"><path d="M12 21s-8-5.2-8-11a4.5 4.5 0 018-2.8A4.5 4.5 0 0120 10c0 5.8-8 11-8 11z"/></symbol><symbol id="i-bell" viewBox="0 0 24 24"><path d="M6 9a6 6 0 0112 0c0 6 2 7 2 7H4s2-1 2-7M10 19a2 2 0 004 0"/></symbol><symbol id="i-close" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></symbol>
+</svg>
+
+<header class="top"><div class="wrap bar">
+  <a class="brand" href="#home" aria-label="بحر"><img src="logo-white.png" alt="بحر"></a>
+  <nav id="nav" aria-label="التنقل الرئيسي">
+    <a href="#home" data-n="h" class="on">الرئيسية</a><a href="#market" data-n="m">السوق البحري</a><a href="#requests" data-n="rq">أطلب اللي تحتاجه</a><!-- BAHR-NAV-PRICES: مكان محجوز لرابط قسم الأسعار لاحقاً (لا يُضاف الآن). مثال: <a href="#prices" data-n="pr">الأسعار</a> بين «أطلب اللي تحتاجه» و«المساعدة» --><a href="#help" data-n="i2">المساعدة</a>
+    <a class="am" data-a="out" href="#login">تسجيل الدخول</a><a class="am" data-a="out" href="#signup">إنشاء حساب</a>
+    <div class="acg" id="acg">
+      <p class="acg-h" data-a="in">حسابي كزبون</p>
+      <a class="am" data-a="in" href="#account">حسابي</a><a class="am" data-a="in" href="#favorites">المفضلة</a><a class="am" data-a="in" href="#searches">البحوث المحفوظة</a><a class="am" data-a="in" href="#alerts">التنبيهات</a><a class="am" data-a="in" href="#inbox">الرسائل</a>
+      <p class="acg-h" data-a="in">البيع والأنشطة التجارية</p>
+      <a class="am" data-a="in" href="#newlisting">إضافة إعلان</a><a class="am" data-a="in" href="#mylistings">إعلاناتي</a><a class="am" data-a="in" id="bizLink" href="#business">سجّل نشاطك التجاري</a><a class="am" data-a="in" id="bizPartsLink" href="#bizparts" style="display:none">عروض قطع الغيار</a><a class="am" data-a="in" id="bizManageLink" href="#bizmanage">منتجاتي وخدماتي</a>
+      <p class="acg-h" id="acgAdm" style="display:none">الإدارة</p>
+      <a class="am" id="admLinkM" href="#admin" style="display:none">لوحة المشرف</a><a class="am" id="admBizLink" href="#admbiz" style="display:none">الأنشطة التجارية (مشرف)</a><a class="am" id="admSvcLink" href="#admsvc" style="display:none">الخدمات البحرية (مشرف)</a><a class="am" id="admPartsLink" href="#admparts" style="display:none">قطع الغيار (مشرف)</a><a class="am" id="admReqLink" href="#admreq" style="display:none">طلبات (مشرف)</a><a class="am" id="admBuyLink" href="#admbuy" style="display:none">طلبات الشراء والعروض (مشرف)</a><a class="am" id="admRevLink" href="#admreviews" style="display:none">تقييمات (مشرف)</a><a class="am" id="admStatLink" href="#admstats" style="display:none">إحصائيات (مشرف)</a>
+      <a class="am" data-a="in" href="#home" data-act="logout">تسجيل الخروج</a>
+    </div>
+  </nav>
+  <div class="acts"><a class="btn btn-o" id="admLink" href="#admin" style="display:none">لوحة المشرف</a><button class="btn btn-o" data-a="in" data-act="acct" type="button" aria-haspopup="true" aria-expanded="false" aria-controls="acg">حسابي ▾</button><button class="btn btn-o" data-a="out" data-go="#login" type="button">تسجيل الدخول</button><button class="btn btn-p" data-a="out" data-go="#signup" type="button">إنشاء حساب</button></div>
+  <div class="hq"><a href="#find" aria-label="البحث"><svg class="ic"><use href="#i-search"/></svg></a><a class="hq-u" data-a="out" href="#login" aria-label="تسجيل الدخول"><svg class="ic"><use href="#i-user"/></svg></a><a class="hq-u" data-a="in" href="#account" aria-label="حسابي"><svg class="ic"><use href="#i-user"/></svg></a><a data-a="in" href="#favorites" aria-label="المفضلة"><svg class="ic"><use href="#i-heart"/></svg></a><a data-a="in" href="#alerts" id="bell" aria-label="التنبيهات" aria-haspopup="true" aria-expanded="false" aria-controls="nfp"><svg class="ic"><use href="#i-bell"/></svg><b id="bc" hidden>0</b></a></div>
+  <button type="button" class="menu-btn" id="menuBtn" aria-expanded="false" aria-controls="nav" aria-label="القائمة"><svg class="ic"><use href="#i-menu"/></svg></button>
+</div></header>
+
+<div class="home"><section class="hero" id="home">
+  <div class="hsl-bgs" aria-hidden="true">
+    <div class="hsl-bg hsl-i y on"><img src="bahr-hero-yacht.jpg" alt="" width="2000" height="1053" decoding="async" fetchpriority="high"></div>
+    <div class="hsl-bg hsl-i j"><picture><source media="(max-width:700px)" srcset="bahr-hero-jetski-m.jpg"><img src="bahr-hero-jetski.jpg" alt="" width="1920" height="1080" loading="lazy" decoding="async"></picture></div>
+    <div class="hsl-bg hsl-i e noimg"></div>
+  </div>
+  </div>
+  <div class="wrap hero-in"><div class="hero-t">
+    <h1 class="sr-only">بحر | BAHR — كل ما تحتاجه لعالم البحر في مكان واحد</h1>
+    <div class="hsl-txt" id="hslTxt" aria-live="polite">
+      <div class="hsl-c hsl-i on"><p class="hsl-t" role="heading" aria-level="2">كل ما تحتاجه لعالم البحر <span class="gd">في مكان واحد</span></p><p class="lead">قوارب ويخوت وجت سكي ومحركات وقطع غيار وخدمات، تصفّحها وقارنها وتواصل مع أصحابها.</p><div class="hsl-b"><a class="btn btn-p" href="#market" data-mt="boat">تصفّح القوارب</a><a class="btn btn-o" href="#services">الخدمات</a></div></div>
+      <div class="hsl-c hsl-i"><p class="hsl-t" role="heading" aria-level="2">سرعة وحماس <span class="gd">على سطح الماء</span></p><p class="lead">اكتشف إعلانات الجت سكي المنشورة، وجرّب المجسم ثلاثي الأبعاد لتعرف أجزاءه وخياراته.</p><div class="hsl-b"><a class="btn btn-p" href="#market" data-mt="jetski">تصفّح الجت سكي</a><a class="btn btn-o" href="#show3d" data-go="#show3d">جرّب المجسم 3D</a></div></div>
+      <div class="hsl-c hsl-i"><p class="hsl-t" role="heading" aria-level="2">محركات وقطع غيار <span class="gd">وخدمات بحرية</span></p><p class="lead">ابحث عن محرك أو قطعة، أو اطلب القطعة التي تحتاجها، أو ابحث عن ورشة وفني.</p><div class="hsl-b"><a class="btn btn-p" href="#parts">BAHR PARTS</a><a class="btn btn-o" href="#market" data-mt="engine">تصفّح المحركات</a></div></div>
+    </div>
+    <form class="search" id="search" role="search"><button type="submit" aria-label="بحث"><svg class="ic"><use href="#i-search"/></svg><span>بحث</span></button><input type="search" aria-label="بحث" placeholder="شنو تدور عليه؟ قارب، جت سكي، محرك أو قطعة" enterkeyhint="search" autocomplete="off"></form>
+    <ul class="hero-chips" aria-label="وصول سريع"><li><a href="#market" data-mt="boat">القوارب</a></li><li><a href="#market" data-mt="jetski">الجت سكي</a></li><li><a href="#market" data-mt="engine">المحركات</a></li><li><a href="#parts">قطع الغيار</a></li><li><a href="#services">الخدمات</a></li></ul>
+    <div class="trust"><span><svg class="ic"><use href="#i-shield"/></svg>التصفح مجاني ودون حساب</span><span><svg class="ic"><use href="#i-search"/></svg>بحث في الإعلانات المنشورة</span></div>
+  </div></div>
+  <div class="hsl-ctl"><button type="button" class="hsl-a" id="hslPrev" aria-label="الشريحة السابقة">›</button><div class="hsl-dots" id="hslDots" role="tablist" aria-label="شرائح الواجهة"></div><button type="button" class="hsl-a" id="hslNext" aria-label="الشريحة التالية">‹</button></div>
+</section>
+
+<div class="bgm bl bg-cats"><div class="wrap sec2"><div class="sec-h"><div><h2>تصفّح حسب التصنيف</h2></div><a class="all2" href="#market">كل الإعلانات ←</a></div><div class="hz" id="cats"></div></div></div>
+<span id="categories"></span>
+
+<section class="ads bgm bw" id="market"><div class="wrap">
+  <div class="ads-h"><div><h2>أحدث الإعلانات</h2><p>الإعلانات المنشورة حالياً على المنصة</p></div><div class="ads-l"><a class="all" href="#market">عرض الكل ←</a><a class="all" href="#newlisting">+ أضف إعلانك</a></div></div>
+  <div class="hz" id="ads"><div class="hz-sk" role="status" aria-label="جارٍ التحميل"><i></i><i></i><i></i><i></i></div></div>
+</div></section>
+
+<section class="sec2 w" id="hm-boat"><div class="wrap"><div class="sec-h"><div><h2>القوارب</h2><p>أحدث إعلانات القوارب المنشورة.</p></div><a class="all2" href="#market" data-mt="boat">عرض الكل ←</a></div><div class="hz" id="hmboat"><div class="hz-sk" role="status" aria-label="جارٍ التحميل"><i></i><i></i><i></i><i></i></div></div></div></section>
+<section class="sec2 l" id="hm-jet"><div class="wrap"><div class="sec-h"><div><h2>الجت سكي</h2><p>أحدث إعلانات الجت سكي المنشورة.</p></div><a class="all2" href="#market" data-mt="jetski">عرض الكل ←</a></div><div class="hz" id="hmjet"><div class="hz-sk" role="status" aria-label="جارٍ التحميل"><i></i><i></i><i></i><i></i></div></div></div></section>
+<section class="sec2 w" id="hm-eng"><div class="wrap"><div class="sec-h"><div><h2>المحركات</h2><p>أحدث إعلانات المحركات المنشورة.</p></div><a class="all2" href="#market" data-mt="engine">عرض الكل ←</a></div><div class="hz" id="hmeng"><div class="hz-sk" role="status" aria-label="جارٍ التحميل"><i></i><i></i><i></i><i></i></div></div></div></section>
+<section class="pe" id="hm-parts"><div class="wrap">
+  <div><h2><em>BAHR</em> PARTS — قطع الغيار البحرية</h2><p>ابحث عن القطعة حسب معدتك ورقم القطعة، أو أرسل طلباً إذا لم تجدها.</p>
+    <form class="search ps" id="partsSearch" role="search"><button type="submit" aria-label="بحث عن قطعة"><svg class="ic"><use href="#i-search"/></svg></button><input type="search" placeholder="اسم القطعة أو رقمها" aria-label="اسم القطعة أو رقمها"></form><a class="btn btn-p" href="#parts">كتالوج القطع حسب المعدة</a><a class="btn btn-o" href="#requestpart">اطلب قطعة</a></div>
+  <div class="pe-c"><b>الكتالوج:</b> <span id="hmp">جارٍ التحقق من الكتالوج…</span><br>التوافق مع معدتك يحتاج دائماً إلى تأكيد قبل الشراء.</div>
+</div></section>
+<section class="sec2 l" id="hm-biz"><div class="wrap">
+  <div class="sec-h"><div><h2>المتاجر والموردون</h2><p>أنشطة تجارية منشورة على بحر.</p></div><a class="all2" href="#stores">عرض الكل ←</a></div>
+  <div class="hz" id="hmb"><div class="hz-sk" role="status" aria-label="جارٍ التحميل"><i></i><i></i><i></i><i></i></div></div></div></section>
+
+<section class="sec2 w" id="hm-srv"><div class="wrap">
+  <div class="sec-h"><div><h2>الخدمات</h2><p>ورش وفنيون ومقدمو خدمات بحرية.</p></div><a class="all2" href="#services">عرض الكل ←</a></div>
+  <div class="hz" id="hms"><div class="hz-sk" role="status" aria-label="جارٍ التحميل"><i></i><i></i><i></i><i></i></div></div></div></section>
+
+
+<section class="show bgm bw" id="show3d"><div class="wrap">
+  <h2>جرّب جت سكي بنفسك بثلاثي الأبعاد</h2><p class="shs">مرّر للأسفل بالماوس أو بإصبعك لتستكشف كل جزء من الجت سكي بالترتيب، وغيّر اللون والخيارات وشاهد السعر التجريبي يتغيّر.</p>
+  <div class="shg"><div class="stage"><canvas id="j3" aria-label="مجسم ثلاثي الأبعاد لجت سكي"></canvas><div id="j3h"></div><p class="j3m" id="j3m">جارٍ تحميل المجسم…</p><p class="j3n">مرّر للأسفل للاستكشاف · اسحب للتدوير</p></div>
+  <aside class="shp" id="j3p"></aside></div>
+  <div class="sdp" id="j3sp" aria-hidden="true"></div><p class="j3d">المجسم توضيحي وليس نسخة رسمية من ياماها، والأسعار والمواصفات تجريبية.</p>
+</div></section>
+<!-- ====== مجسمات Sketchfab ثلاثية الأبعاد: لإضافة مجسم جديد انسخ عنصر skc كاملاً داخل skg وبدّل المعرّف في src والعنوان واسم الناشر والروابط. حقوق الناشر يجب أن تبقى ظاهرة. ====== -->
+<section class="sk" id="sk3d"><div class="wrap">
+  <h2>شاهد المجسمات بثلاثي الأبعاد</h2><p class="sks">حرّك المجسم بإصبعك أو بالماوس لتدويره وتكبيره ومشاهدته من كل الزوايا.</p>
+  <div class="skg">
+    <div class="skc"><iframe title="jetski Yamaha Superjet 700" loading="lazy" allowfullscreen allow="autoplay; fullscreen; xr-spatial-tracking" src="https://sketchfab.com/models/299480aa65cd49d397471c28fade6bb8/embed?preload=1"></iframe>
+    <p><a href="https://sketchfab.com/3d-models/jetski-yamaha-superjet-700-299480aa65cd49d397471c28fade6bb8" target="_blank" rel="nofollow noopener">jetski Yamaha Superjet 700</a> by <a href="https://sketchfab.com/martinflash" target="_blank" rel="nofollow noopener">martinflash</a> on <a href="https://sketchfab.com" target="_blank" rel="nofollow noopener">Sketchfab</a></p></div>
+    <div class="skc"><iframe title="Jetski" loading="lazy" allowfullscreen allow="autoplay; fullscreen; xr-spatial-tracking" src="https://sketchfab.com/models/446f5b7ba9f74bfb83ad696c494e899e/embed?autospin=1&amp;ui_theme=dark"></iframe>
+    <p><a href="https://sketchfab.com/3d-models/jetski-446f5b7ba9f74bfb83ad696c494e899e" target="_blank" rel="nofollow noopener">Jetski</a> by <a href="https://sketchfab.com/AKStudio3D" target="_blank" rel="nofollow noopener">Adrian Kulawik</a> on <a href="https://sketchfab.com" target="_blank" rel="nofollow noopener">Sketchfab</a></p></div>
+    <div class="skc"><iframe title="Kawasaki 310XUltra Jet Ski" loading="lazy" allowfullscreen allow="autoplay; fullscreen; xr-spatial-tracking" src="https://sketchfab.com/models/37a2348f02da472d98310fd5621307c6/embed?autospin=1&amp;autostart=1&amp;ui_theme=dark"></iframe>
+    <p><a href="https://sketchfab.com/3d-models/kawasaki-310xultra-jet-ski-37a2348f02da472d98310fd5621307c6" target="_blank" rel="nofollow noopener">Kawasaki 310XUltra Jet Ski</a> by <a href="https://sketchfab.com/XOIAL" target="_blank" rel="nofollow noopener">XOIAL</a> on <a href="https://sketchfab.com" target="_blank" rel="nofollow noopener">Sketchfab</a></p></div>
+  </div>
+</div></section>
+
+<section class="tech bgm bw" id="tech"><div class="wrap tech-g" style="padding-top:44px">
+  <div class="tech-c"><h2>BAHR TECH مركز</h2><p style="margin:0;color:#CFDBF0">مركز مخصص للأدوات والبرامج الفنية. الهيكل متاح للاستعراض، والمحتوى الفني لم يُضَف بعد.</p>
+    <ul><li>قريباً: أدلة وأدوات فنية</li><li>حالياً: <a href="#help" style="color:#fff;text-decoration:underline">مركز المساعدة والتعليم البحري</a></li></ul>
+    <div><a class="btn btn-p" href="#bt">استعرض هيكل المركز الفني</a></div></div>
+  <div class="feat">
+    <div class="fi"><i><svg class="ic"><use href="#i-plus"/></svg></i><div><b>نشر إعلانك بسهولة</b><span>سجل حسابك وانشر إعلانك في دقائق</span></div></div>
+    <div class="fi"><i><svg class="ic"><use href="#i-chat"/></svg></i><div><b>تواصل مباشر مع البائعين</b><span>محادثات آمنة وسريعة</span></div></div>
+    <div class="fi"><i><svg class="ic"><use href="#i-wrench"/></svg></i><div><b>مركز المساعدة</b><span>مقالات تعليمية عامة وإرشادات الاستخدام</span></div></div>
+  </div>
+</div></section>
+
+<section class="how bgm bl" id="how"><div class="wrap"><h2>كيف تعمل المنصة؟</h2><p>خطوات بسيطة يمكنك الوصول لكل ما تحتاجه</p>
+  <ol class="steps">
+    <li><span class="n">1</span><i><svg class="ic"><use href="#i-user"/></svg></i><b>إنشاء حساب</b><span>سجل برقم هاتفك أو بريدك الإلكتروني</span></li>
+    <li><span class="n">2</span><i><svg class="ic"><use href="#i-search"/></svg></i><b>تصفح الإعلانات</b><span>اختر ما يناسبك</span></li>
+    <li><span class="n">3</span><i><svg class="ic"><use href="#i-chat"/></svg></i><b>تواصل مع البائع</b><span>اطلب تفاصيل أكثر</span></li>
+    <li><span class="n">4</span><i><svg class="ic"><use href="#i-hand"/></svg></i><b>أتمم الصفقة</b><span>بأمان وسهولة</span></li>
+  </ol></div></section>
+
+<section class="sec2 l" id="hm-trust"><div class="wrap">
+  <div class="sec-h"><div><h2>الثقة والسلامة</h2><p>إرشادات تساعدك على الشراء والتعامل بوعي.</p></div></div>
+  <div class="tr23"><a href="#safety"><svg class="ic"><use href="#i-shield"/></svg><b>السلامة والثقة</b><span>كيف تتحقق من البائع والمعدة قبل الدفع.</span></a><a href="#faq"><svg class="ic"><use href="#i-search"/></svg><b>الأسئلة الشائعة</b><span>أجوبة سريعة عن الحسابات والإعلانات.</span></a><a href="#help"><svg class="ic"><use href="#i-wrench"/></svg><b>مركز المساعدة</b><span>مقالات تعليمية عن القوارب والمحركات.</span></a><a href="#contact"><svg class="ic"><use href="#i-chat"/></svg><b>تواصل معنا</b><span>أرسل استفسارك أو بلّغ عن مشكلة.</span></a></div>
+</div></section>
+
+<section class="sec2 w" id="hm-tips"><div class="wrap"><div class="sec-h"><div><h2>نصائح بحرية</h2><p>من مركز المساعدة: معلومات تعليمية عامة.</p></div><a class="all2" href="#help">عرض الكل ←</a></div><div class="hz" id="hmtips"></div></div></section>
+<section class="sec2 l" id="hm-why"><div class="wrap"><div class="sec-h"><div><h2>لماذا بحر؟</h2></div></div><div class="why"><a href="#safety"><svg class="ic"><use href="#i-shield"/></svg><b>بيئة آمنة</b><span>إرشادات للتحقق من البائع والمعدة قبل الدفع.</span></a><a href="#parts"><svg class="ic"><use href="#i-parts"/></svg><b>BAHR PARTS</b><span>كتالوج قطع غيار مع طلب قطعة عند عدم توفرها.</span></a><a href="#services"><svg class="ic"><use href="#i-wrench"/></svg><b>ورش وخدمات</b><span>ورش وفنيون حسب المحافظة والمعدة.</span></a><a href="#market"><svg class="ic"><use href="#i-chat"/></svg><b>تواصل مباشر</b><span>محادثات مع البائعين داخل المنصة.</span></a></div></div></section>
+<section class="sec2 w" id="hm-rev"><div class="wrap"><div class="sec-h"><div><h2>آراء المستخدمين</h2></div></div><div class="rv">لا توجد آراء منشورة بعد. ستظهر هنا بعد تفعيل نظام التقييمات.</div></div></section>
+<section class="abt" id="hm-about"><div class="wrap abt-g"><div class="abt-pics"><figure><img src="bahr-hero-jetski2.jpg" alt="جت سكي في عرض البحر" width="1920" height="1080" loading="lazy" decoding="async"></figure><figure><img src="hero1.jpg" alt="جت سكي بسرعة على سطح الماء" width="1800" height="2250" loading="lazy" decoding="async"></figure></div><div><h2>من نحن</h2><p>بحر منصة عربية تجمع المهتمين بالقوارب والجت سكي والمحركات وقطع الغيار والمعدات البحرية والورش والفنيين في مكان واحد. التصفح والبحث متاحان للجميع دون حساب.</p><div class="abt-b"><a class="btn btn-p" href="#about">تعرّف علينا</a><a class="btn btn-o" href="#howitworks">كيف تعمل المنصة</a></div></div><div class="abt-c"><h3>تحتاج مساعدة؟</h3><a href="#help">مركز المساعدة</a><a href="#faq">الأسئلة الشائعة</a><a href="#safety">السلامة والثقة</a><a href="#contact">تواصل معنا</a></div></div></section>
+<section class="join"><div class="wrap"><h2>انضم إلى مجتمع بحر</h2><p>كن جزءاً من أكبر منصة بحرية في العراق</p>
+  <button type="button" class="btn btn-p" data-go="#signup">إنشاء حساب جديد</button><a class="btn btn-o" href="#market">تصفح المنصة</a></div></section>
+
+</div>
+<main id="mk" class="bgm bl"><div class="wrap">
+<h1>السوق البحري</h1><p class="mk-s">تصفّح القوارب والجت سكي والمحركات وقطع الغيار والمعدات البحرية.</p>
+<div class="demo" id="dm" style="display:none"><b>بيانات تجريبية:</b> تعذّر تحميل الإعلانات من قاعدة البيانات (أو لم تُجهَّز بعد)، لذلك تُعرض أمثلة للتصميم فقط. الإعلانات والأسعار والبائعون المعروضون هنا للتصميم فقط، وليست إعلانات حقيقية. الصور من Pexels وهي توضيحية.</div>
+<div class="tabs" id="tabs"></div>
+<form class="fb" id="fb" onsubmit="return false">
+<label class="wide">بحث<input id="q" type="search" maxlength="80" placeholder="الاسم أو الشركة أو الموديل أو السنة أو رقم القطعة/التسلسلي"></label>
+<label>المحافظة<select id="pv"><option value="">كل المحافظات</option></select></label>
+<label>الحالة<select id="cd"><option value="">الكل</option><option>جديد</option><option>مستعمل</option></select></label>
+<label>الشركة المصنعة<select id="mf"><option value="">الكل</option></select></label>
+<label>الموديل<input id="md" placeholder="مثال: VX"></label>
+<div class="pr" id="yrw"><label>السنة من<input id="y1" type="number" min="1950" max="2100" inputmode="numeric"></label><label>إلى<input id="y2" type="number" min="1950" max="2100" inputmode="numeric"></label></div>
+<label id="hpw" style="display:none">القدرة (حصان) من<input id="hp" type="number" min="0" inputmode="numeric"></label>
+<div class="pr"><label>السعر من<input id="p1" type="number" min="0" inputmode="numeric"></label><label>إلى<input id="p2" type="number" min="0" inputmode="numeric"></label></div>
+<label>العملة (لنطاق السعر)<select id="cu"><option value="USD">دولار ($)</option><option value="IQD">دينار (د.ع)</option></select></label>
+<label>الترتيب<select id="so"><option value="">الأحدث</option><option value="a">السعر: الأقل</option><option value="d">السعر: الأعلى</option></select></label>
+<button class="rs" id="sv-s" type="button">حفظ هذا البحث</button>
+<button class="rs" id="rs" type="button">مسح التصفية</button>
+</form>
+<p class="cnt" id="cnt2" role="status" aria-live="polite"></p>
+<div class="mg" id="mg"></div>
+</div></main>
+<main id="sv" class="bgm bl"><div class="wrap">
+<!-- R7: واجهة الدليل الجديدة تُبنى في services-center.js. العناصر القديمة تبقى مخفية بمعرّفاتها حتى لا يتعطل app.js. -->
+<div id="r7"></div>
+<div id="r7-legacy" hidden>
+<h1>الخدمات</h1><p class="sv-s mk-s">ابحث عن ورشة أو فني لصيانة الجت سكي والمحركات والقوارب وتشخيص الأعطال.</p>
+<div class="demo" id="ds" style="display:none"><b>بيانات تجريبية:</b> تعذّر تحميل الخدمات من قاعدة البيانات (أو لم تُجهَّز بعد)، لذلك تُعرض أمثلة للتصميم فقط. الورش والفنيون المعروضون هنا للتصميم فقط، وليسوا مقدمي خدمة حقيقيين. لا توجد أسماء أو أرقام هواتف أو تقييمات حقيقية. الصور من Pexels وهي توضيحية.</div>
+<div class="tabs" id="stabs"></div><div data-nearby data-weather style="display:flex;gap:8px;flex-wrap:wrap;margin:10px 0"></div>
+<form class="fb" id="sfb" onsubmit="return false">
+<label class="wide">بحث<input id="sq" type="search" placeholder="اسم الورشة أو الفني أو الخدمة"></label>
+<label>المحافظة<select id="spv"><option value="">كل المحافظات</option></select></label>
+<label>المنطقة<select id="sar"><option value="">كل المناطق</option></select></label>
+<label>نوع المحرك أو المعدة<select id="seq"><option value="">الكل</option></select></label>
+<button class="rs" id="srs" type="button">مسح التصفية</button>
+</form>
+<p class="cnt" id="scnt" role="status" aria-live="polite"></p>
+<div class="mg" id="smg"></div>
+</div>
+</div></main>
+<div id="sd" role="dialog" aria-modal="true" aria-label="تفاصيل مقدم الخدمة"><div class="dw" id="sdw"></div></div>
+<!-- R8: الملف التجاري العام (يُبنى في business-profile-center.js). المسار: #store/المعرّف -->
+<main id="bp" class="bgm bl" aria-label="الملف التجاري للنشاط"><div id="bpc" tabindex="-1"></div></main>
+<div class="sc-dlg r8-dlg" id="r8Dlg" role="dialog" aria-modal="true" aria-label="التفاصيل" hidden><div class="sc-dw r8-dw" id="r8Dw" tabindex="-1"></div></div>
+<main id="au" class="bgm bl"><div class="wrap"><div class="au-c">
+<img class="lg" src="logo-blue.png" alt="بحر">
+<section class="ap" id="ap-denied"></section>
+<section class="ap" id="ap-load"><p class="sub">جارٍ التحقق من حالة الحساب…</p></section>
+<section class="ap" id="ap-login"><h1>تسجيل الدخول</h1><p class="sub">أهلاً بك في بحر</p><div class="msg" role="alert"></div>
+<form id="f-login" novalidate><label>رقم الهاتف<input id="l-e" type="tel" inputmode="tel" autocomplete="username" dir="ltr" placeholder="07701234567" required><span class="fe" data-e="l-e"></span></label><label>كلمة المرور<div class="pw"><input id="l-p" type="password" autocomplete="current-password" required><button type="button" class="eye" aria-label="إظهار كلمة المرور"></button></div><span class="fe" data-e="l-p"></span></label><label class="chk"><input type="checkbox" id="l-r" checked><span>تذكرني</span></label><button class="btn" type="submit">دخول</button></form>
+<div class="lnk"><a href="#forgot">نسيت كلمة المرور؟</a><a href="#signup">إنشاء حساب جديد</a></div></section>
+<section class="ap" id="ap-signup"><h1>إنشاء حساب جديد</h1><p class="sub">سجّل لتنضم إلى مجتمع بحر</p><div class="msg" role="alert"></div>
+<form id="f-signup" novalidate><label>الاسم الكامل<input id="s-n" autocomplete="name" required><span class="fe" data-e="s-n"></span></label><label>رقم الهاتف<input id="s-ph" type="tel" inputmode="tel" autocomplete="tel" dir="ltr" placeholder="07701234567" required><span class="fe" data-e="s-ph"></span></label><label>البريد الإلكتروني (اختياري)<input id="s-e" type="email" inputmode="email" autocomplete="email" dir="ltr"><span class="fe" data-e="s-e"></span></label><label>كلمة المرور (8 أحرف على الأقل)<div class="pw"><input id="s-p" type="password" autocomplete="new-password" required><button type="button" class="eye" aria-label="إظهار كلمة المرور"></button></div><span class="fe" data-e="s-p"></span></label><label>تأكيد كلمة المرور<div class="pw"><input id="s-p2" type="password" autocomplete="new-password" required><button type="button" class="eye" aria-label="إظهار كلمة المرور"></button></div><span class="fe" data-e="s-p2"></span></label><label class="chk"><input type="checkbox" id="s-t"><span>أوافق على <a href="#terms" target="_blank" rel="noopener">الشروط والأحكام</a> و<a href="#privacy" target="_blank" rel="noopener">سياسة الخصوصية</a></span></label><span class="fe" data-e="s-t"></span><button class="btn" type="submit">إنشاء الحساب</button></form>
+<div class="lnk"><span>لديك حساب؟</span><a href="#login">تسجيل الدخول</a></div></section>
+<section class="ap" id="ap-forgot"><h1>استعادة كلمة المرور</h1><p class="sub">أدخل بريدك الإلكتروني المسجّل وسنرسل لك رابط الاستعادة. إن سجّلت برقم الهاتف فقط فلا تتوفر استعادة تلقائية حالياً، تواصل معنا من صفحة «تواصل معنا».</p><div class="msg" role="alert"></div>
+<form id="f-forgot" novalidate><label>البريد الإلكتروني<input id="f-e" type="email" inputmode="email" autocomplete="email" dir="ltr" required><span class="fe" data-e="f-e"></span></label><button class="btn" type="submit">إرسال الرابط</button></form>
+<div class="lnk"><a href="#login">العودة لتسجيل الدخول</a></div></section>
+<section class="ap" id="ap-reset"><h1>كلمة مرور جديدة</h1><p class="sub">اختر كلمة مرور جديدة لحسابك</p><div class="msg" role="alert"></div>
+<form id="f-reset" novalidate><label>كلمة المرور الجديدة<div class="pw"><input id="r-p" type="password" autocomplete="new-password" required><button type="button" class="eye" aria-label="إظهار كلمة المرور"></button></div><span class="fe" data-e="r-p"></span></label><label>تأكيد كلمة المرور<div class="pw"><input id="r-p2" type="password" autocomplete="new-password" required><button type="button" class="eye" aria-label="إظهار كلمة المرور"></button></div><span class="fe" data-e="r-p2"></span></label><button class="btn" type="submit">حفظ كلمة المرور</button></form></section>
+<section class="ap" id="ap-account"><h1>حسابي</h1><div class="msg" role="alert"></div><div id="acc"></div><div data-follow-mine style="margin:14px 0"></div>
+<form id="f-rec" novalidate hidden><label>بريد للاستعادة (اختياري)<input id="rc-e" type="email" inputmode="email" autocomplete="email" dir="ltr"><span class="fe" data-e="rc-e"></span></label><p class="hint" style="margin:0 0 8px;font-size:13px">سنرسل رابط تأكيد إلى هذا البريد. بعد تأكيده تستطيع استعادة كلمة المرور به.</p><button class="btn" type="submit">إضافة البريد</button></form>
+<p style="margin:16px 0 0"><button class="btn" data-act="logout" type="button">تسجيل الخروج</button></p>
+<div class="lnk"><a href="#newlisting">إضافة إعلان</a><a href="#mylistings">إعلاناتي</a><a href="#requests">أطلب اللي تحتاجه</a><a href="#parts">قطع الغيار BAHR PARTS</a><a href="#inbox">BAHR CONNECT — الرسائل</a><a href="#business">BAHR BUSINESS — حساب النشاط التجاري</a><a href="#profile">ملفي الشخصي</a><a href="#favorites">المفضلة</a><a href="#searches">بحوثي المحفوظة</a><a href="#alerts">التنبيهات</a><a href="#market">السوق البحري</a><a href="#services">الخدمات</a></div></section>
+<section class="ap b17" id="ap-b17"><div id="b17c"></div></section>
+<section class="ap b17" id="ap-b55"><div id="b55c"></div></section>
+<section class="ap b17" id="ap-b56"><div id="b56c"></div></section>
+<section class="ap b17" id="ap-b57"><div id="b57c"></div></section>
+<section class="ap b17" id="ap-b58"><div id="b58c"></div></section>
+<section class="ap b17" id="ap-b59"><div id="b59c"></div></section>
+<section class="ap b17" id="ap-b59p"><div id="b59p"></div></section>
+<section class="ap b17" id="ap-b60"><div id="b60c"></div></section>
+<section class="ap b17" id="ap-b15"><div id="b15c"></div></section>
+<section class="ap b17" id="ap-b49"><div id="b49c"></div></section>
+<section class="ap b17" id="ap-b62"><div id="b62c"></div></section>
+<section class="ap b17" id="ap-rqh" style="max-width:980px"><div id="rqhc">
+<h1>أطلب اللي تحتاجه</h1><p class="b17n">كل ما يخص طلباتك في مكان واحد: اطلب قطعة أو خدمة، وتابع طلباتك وطلبات الشراء.</p>
+<div class="bt-g">
+<a class="bt-k" href="#requestpart"><b>أطلب قطعة</b><span>لم تجد القطعة التي تحتاجها؟ أرسل طلب قطعة غيار.</span></a>
+<a class="bt-k" href="#requestservice"><b>أطلب خدمة</b><span>أرسل طلب خدمة أو صيانة بحرية.</span></a>
+<a class="bt-k" href="#myrequests"><b>طلباتي <i data-rqc></i></b><span>تابع حالة طلبات القطع والخدمات التي أرسلتها.</span></a>
+<a class="bt-k" href="#buymine"><b>طلبات الشراء</b><span>طلبات الشراء الخاصة بك والعروض الواردة عليها.</span></a>
+<a class="bt-k" href="#bizstats"><b>إحصائيات الطلبات</b><span>إحصائيات نشاطك، وتشمل عدد عروضك على طلبات الشراء.</span></a>
+</div>
+<p class="b15h"><a class="btn" href="#buynew">+ أضف طلب شراء</a><a class="btn" href="#buyhub">الطلبات العامة</a></p>
+<h2 style="font-size:20px;margin:22px 0 10px;color:var(--nav)">لوحات إدارة الطلبات</h2>
+<div class="bt-g">
+<a class="bt-k" href="#buyboard"><b>لوحة طلبات الأنشطة</b><span>طلبات الشراء المتاحة للأنشطة التجارية المسجّلة.</span></a>
+<a class="bt-k" id="rqhA1" href="#admreq" style="display:none"><b>طلبات القطع والخدمات (مشرف)</b><span>مراجعة طلبات القطع والخدمات وتحديث حالتها.</span></a>
+<a class="bt-k" id="rqhA2" href="#admbuy" style="display:none"><b>طلبات الشراء والعروض (مشرف)</b><span>إدارة طلبات الشراء والعروض.</span></a>
+</div>
+</div></section>
+<section class="ap b17" id="ap-b50"><div id="b50c"></div></section>
+<section class="ap b17" id="ap-b52"><div id="b52c"></div></section>
+<section class="ap b17" id="ap-b19"><div id="b19c"></div></section>
+<section class="ap b17" id="ap-b20"><div id="b20c"></div></section>
+<section class="ap b17" id="ap-b21"><div id="b21c"></div></section>
+<section class="ap b17" id="ap-b22"><div id="b22c"></div></section>
+<!-- R8: لوحة إدارة المنتجات والخدمات وبيانات النشاط. المسار: #bizmanage -->
+<section class="ap b17" id="ap-r8" style="max-width:1100px"><div id="r8c"></div></section>
+</div></div></main>
+<main id="uc" class="bgm bl"><div class="wrap"><div class="uct" id="uct"></div><div id="ucp"></div></div></main>
+<main id="pf" class="bgm bl"><div class="wrap"><div id="pfc"></div></div></main>
+<main id="sl" class="bgm bl"><div class="wrap" id="slc"></div></main>
+<main id="ip" class="bgm bl"><div class="wrap"><div id="ipc" tabindex="-1"></div></div></main>
+<main id="cx" class="bgm bl"><div class="wrap"><div id="cxc" tabindex="-1"></div></div></main>
+<main id="bt" class="bgm bl"><div class="wrap"><div id="btc" tabindex="-1"></div></div></main>
+<main id="ad" class="bgm bl"><div class="wrap">
+<div class="adg" id="adg"><p>جارٍ التحقق من الصلاحية…</p></div>
+<div class="adl" id="adl" style="display:none"><nav class="adn" id="adn" aria-label="أقسام لوحة الإدارة"><p>BAHR ADMIN</p><button type="button" class="ads on" data-s="ov">النظرة العامة</button><button type="button" class="ads" data-s="prod">الإعلانات والمنتجات</button><button type="button" class="ads" data-s="ord">الطلبات والخدمات</button><button type="button" class="ads" data-s="usr">المستخدمون والتجار</button><button type="button" class="ads" data-s="com">التواصل وخدمة العملاء</button><button type="button" class="ads" data-s="trust">مركز الثقة والمراجعة</button><button type="button" class="ads" data-s="fin">المالية والأرباح</button><button type="button" class="ads" data-s="ana">التحليلات والتسويق</button><button type="button" class="ads" data-s="plat">تعديل المنصة</button><button type="button" class="ads" data-s="sys">إعدادات النظام</button></nav>
+<div><div class="adsub" id="adsub" aria-label="صفحات القسم"><div class="adsg" data-s="ov" data-title="النظرة العامة" data-note="" role="group"><button type="button" data-t="dash">لوحة المعلومات</button><a href="#opscenter" data-d="صفحة مركز العمليات الحالية (B56).">مركز العمليات</a><button type="button" data-t="b87">متابعة المهام والمخاطر</button><button type="button" data-t="b88">مراقبة العمليات التشغيلية</button></div><div class="adsg" data-s="prod" data-title="الإعلانات والمنتجات" data-note="" role="group" hidden><button type="button" data-t="ads">مركز الإعلانات والمنتجات</button><a href="#admparts" data-d="مراجعة كتالوج القطع والعروض.">BAHR PARTS: الكتالوج والعروض</a><button type="button" data-t="pdup">جودة كتالوج القطع</button><button type="button" data-t="ref">التصنيفات والمراجع</button><a href="#adm29" data-d="الخصومات العامة على الإعلانات والكوبونات (ADM29).">الخصومات والكوبونات (ADM29)</a></div><div class="adsg" data-s="ord" data-title="الطلبات والخدمات" data-note="مركز موحّد للقراءة والمتابعة وتحديث الحالة، وبجانبه صفحات الإدارة الحالية." role="group" hidden><button type="button" data-t="ord5">مركز الطلبات والخدمات</button><a href="#admreq" data-d="رقم الطلب والحالة وبيانات التواصل مع البحث والفلاتر.">طلبات القطع والخدمات</a><a href="#admbuy" data-d="إدارة طلبات الشراء والعروض.">طلبات الشراء والعروض</a><a href="#admsvc" data-d="إدارة الخدمات البحرية.">الخدمات البحرية</a></div><div class="adsg" data-s="usr" data-title="المستخدمون والتجار" data-note="" role="group" hidden><button type="button" data-t="u3">مركز المستخدمين والتجار</button><button type="button" data-t="users">المستخدمون والحسابات</button><button type="button" data-t="b74">إدارة الحسابات وطلبات الحذف</button><button type="button" data-t="stores">المتاجر والموردون</button><button type="button" data-t="workshops">الورش والفنيون</button><a href="#admbiz" data-d="قرارات قبول الأنشطة التجارية وتوثيقها.">إدارة الأنشطة (قرارات)</a><a href="#adm24" data-d="مركز العضويات والحسابات التجارية (ADM24): أنواع الحسابات والفصل بين العضوية والتحقق والترويج.">العضويات والحسابات (ADM24)</a></div><div class="adsg" data-s="com" data-title="التواصل وخدمة العملاء" data-note="مركز موحّد للقراءة والتنقل، وبجانبه صفحات الدعم والبلاغات الحالية." role="group" hidden><button type="button" data-t="com6">مركز التواصل وخدمة العملاء</button><a href="#admsupport" data-d="تذاكر الدعم والشكاوى.">الدعم الفني والشكاوى</a><a href="#adm15" data-d="مركز الدعم الفني وإدارة المشكلات (ADM15): التذاكر وقاعدة المعرفة.">مركز الدعم الفني (ADM15)</a><button type="button" data-t="convrep">بلاغات المحادثات</button><a href="#adm23" data-d="مركز المحادثات والتواصل (ADM23): دعم الإدارة وبلاغات المحادثات والجاهزية.">مركز المحادثات (ADM23)</a><button type="button" data-t="ntf">الإشعارات</button><a href="#adm22" data-d="مركز إدارة الإشعارات والتنبيهات (ADM22): طابور المتابعة والقنوات والقواعد.">مركز الإشعارات (ADM22)</a></div><div class="adsg" data-s="trust" data-title="مركز الثقة والمراجعة" data-note="" role="group" hidden><button type="button" data-t="trust">مركز الثقة (الرئيسية)</button><button type="button" data-t="reps">بلاغات الإعلانات والمستخدمين</button><a href="#admpartrep" data-d="بلاغات قطع الغيار.">بلاغات القطع</a><button type="button" data-t="verif">التحقق والمراجعة</button><a href="#admreviews" data-d="مراجعة تقييمات الأنشطة.">مراجعة التقييمات</a><a href="#adm21" data-d="مركز التقييمات وسمعة الأنشطة (ADM21): واجهة جاهزة بانتظار جداول التخزين.">مركز التقييمات (ADM21)</a><a href="#admrisk" data-d="مؤشرات الأمان والمخاطر (B58).">مركز الأمان والمخاطر</a><a href="#adm19" data-d="مركز الأمان ومراقبة المخاطر (ADM19): حالات ومؤشرات تحتاج مراجعة.">مركز الأمان (ADM19)</a></div><div class="adsg" data-s="fin" data-title="المالية والأرباح" data-note="الإيرادات والسجل والتقارير تُقرأ من مدفوعات باقات المنشورات (B55) فقط. الترويج والحملات والطلبات والرعاة واجهات بلا تخزين بعد. لا توجد بوابة دفع. هذا القسم للمدير العام فقط." role="group" hidden><button type="button" data-t="f81">ملخص الإيرادات</button><button type="button" data-t="f82">خيارات الترويج</button><button type="button" data-t="f83">الحملات والإعلانات الممولة</button><button type="button" data-t="f84">السجل المالي</button><button type="button" data-t="f85">طلبات الترويج</button><button type="button" data-t="f86">الرعاة والشركاء</button><button type="button" data-t="f87">التقارير والتصدير</button><a href="#adm20" data-d="مركز الترويج والإعلانات المميزة والحملات (ADM20): واجهة جاهزة بانتظار جداول التخزين.">مركز الترويج والحملات (ADM20)</a><a href="#admpay" data-d="قبول المدفوعات أو رفضها أو طلب معلومات إضافية.">مراجعة المدفوعات</a></div><div class="adsg" data-s="ana" data-title="التحليلات والتسويق" data-note="كل رقم هنا من بيانات المنصة الفعلية. ما لا يُقاس بعد (الزيارات والمصادر ونقرات الاتصال والحملات) يظهر «غير متاح» مع المطلوب لتفعيله. للمدير العام فقط." role="group" hidden><button type="button" data-t="an1">لوحة التحليلات</button><button type="button" data-t="an2">مصادر الزيارات</button><button type="button" data-t="an3">روابط الحملات</button><button type="button" data-t="an4">أداء الإعلانات</button><button type="button" data-t="an5">رحلة الزائر</button><button type="button" data-t="an6">المناطق والفئات</button><a href="#adm25" data-d="مركز التقارير والإحصائيات التنفيذية (ADM25): مؤشرات فعلية من بيانات المنصة حسب الفترة، مع تصدير CSV.">مركز التقارير (ADM25)</a><a href="#admstats" data-d="إحصائيات المنصة الحالية.">إحصائيات المنصة</a></div><div class="adsg" data-s="plat" data-title="تعديل المنصة" data-note="" role="group" hidden><button type="button" data-t="site">واجهة الموقع والأقسام</button><button type="button" data-t="b72">إعدادات المنصة</button><a href="#admcms" data-d="محرر المحتوى والصفحات والأسئلة الشائعة (B59).">محرر المحتوى</a><button type="button" data-t="cnt">المحتوى والأسئلة الشائعة</button><button type="button" data-t="fil">مركز الوسائط (الملفات والصور)</button><a href="#adm16" data-d="المحافظات والمناطق والتغطية الجغرافية (ADM16): مراجعة المواقع وجودة البيانات.">المحافظات والمناطق (ADM16)</a></div><div class="adsg" data-s="sys" data-title="إعدادات النظام" data-note="مركز واحد للإعدادات العامة وصحة النظام والأخطاء وسجل النشاط والنسخ والصيانة. ما لا يدعمه النظام يظهر «غير مدعوم» أو «غير متحقق منه». للمدير العام فقط." role="group" hidden><button type="button" data-t="sy1">الإعدادات العامة</button><button type="button" data-t="sy2">إعدادات التواصل</button><button type="button" data-t="sy3">إعدادات المنصة</button><button type="button" data-t="sy4">صحة النظام</button><button type="button" data-t="qa">الأخطاء والحوادث</button><button type="button" data-t="audit">سجل النشاط الإداري</button><button type="button" data-t="b91">النسخ الاحتياطي والاستعادة</button><button type="button" data-t="adm14">مركز النسخ والتعافي (ADM14)</button><button type="button" data-t="sy8">الصيانة وحالة الخدمات</button><a href="#adm27" data-d="جودة المنصة والاختبارات (ADM27): فحوصات حقيقية للتنقل والملفات والخدمات الخلفية والاستجابة والخصوصية، مع سجل المشكلات.">جودة المنصة والاختبارات (ADM27)</a><a href="#adm28" data-d="مركز الأداء والسرعة (ADM28): قياسات فعلية من متصفحك عند التشغيل لتحميل الصفحة والموارد والصور والبحث، مع توصيات حسب الأولوية. بجانب صفحة «أداء المنصة وصحتها» الحالية.">مركز الأداء والسرعة (ADM28)</a><span class="adsx">صفحات إضافية:</span><button type="button" data-t="set">الأدوار الإدارية</button><button type="button" data-t="monitor">مراقبة الحالة</button><button type="button" data-t="perf">أداء المنصة وصحتها</button><button type="button" data-t="b90">مركز سلامة البيانات</button></div></div><div class="admsg" id="admsg" role="status"></div><section class="adm" id="adm"></section></div></div>
+<div id="adx" role="dialog" aria-modal="true" aria-label="التفاصيل"><div class="dw" id="adw"></div></div>
+</div></main>
+<div id="dt" role="dialog" aria-modal="true" aria-label="تفاصيل المنتج"><div class="dw" id="dw"></div></div>
+<footer class="bgm bw"><div class="wrap">
+  <div class="fr"><img src="logo-white.png" alt="بحر"><span>بحر ... أكثر من مجرد منصة</span>
+    </div>
+  <div class="fgs"><div><h4>اكتشف</h4><a href="#market">السوق البحري</a><a href="#requests">أطلب اللي تحتاجه</a><a href="#stores">المتاجر والموردون</a><a href="#services">الخدمات</a><a href="#parts">BAHR PARTS</a><a href="#find">البحث</a></div><div><h4>حسابك</h4><a href="#account">حسابي</a><a href="#favorites">المفضلة</a><a href="#myrequests">طلباتي</a><a href="#inbox">الرسائل</a><a href="#alerts">التنبيهات</a></div><div><h4>بحر</h4><a href="#about">من نحن</a><a href="#howitworks">كيف تعمل المنصة</a><a href="#sellerguide">دليل البائع</a><a href="#faq">الأسئلة الشائعة</a><a href="#safety">السلامة والثقة</a><a href="#help">مركز المساعدة</a><a href="#contact">تواصل معنا</a><a href="#terms">الشروط والأحكام</a><a href="#privacy">سياسة الخصوصية</a></div></div>
+  <div class="fl"><span>جميع الحقوق محفوظة © 2025 بحر</span></div>
+  <p class="st" id="st" data-s=""><i></i><span>جارٍ فحص الاتصال بـ Supabase…</span></p>
+</div></footer>
+<main id="adm15" class="bgm bl" aria-label="مركز الدعم الفني وإدارة المشكلات"><div class="wrap">
+  <div class="sc-top"><div><h1>مركز الدعم الفني وإدارة المشكلات</h1><p class="sc-sub">ADM15 — تذاكر الدعم والتصنيف والمتابعة وقاعدة المعرفة. تُعرض هنا البيانات المحمّلة من النظام الفعلي فقط.</p></div><a class="btn btn-o sc-back" href="#admin">رجوع للوحة الإدارة</a></div>
+  <div class="sc-tabs" role="tablist" aria-label="أقسام مركز الدعم"><button type="button" role="tab" class="on" data-sc="tk" aria-selected="true">التذاكر</button><button type="button" role="tab" data-sc="kb" aria-selected="false">قاعدة المعرفة</button></div>
+  <div class="sc-state" id="scState" role="status" aria-live="polite"><p>لم يتم ربط مصدر بيانات الدعم بعد. يتطلب ذلك ربط <b>BAHR_ADM15.mount</b> من app.js بالجداول الفعلية.</p></div>
+  <div id="scTk" hidden>
+    <section class="sc-kpis" id="scKpis" aria-label="مؤشرات الدعم"></section>
+    <form class="sc-f" id="scF" role="search" aria-label="بحث وتصفية التذاكر" onsubmit="return false">
+      <input type="search" id="scQ" placeholder="بحث برقم التذكرة أو العنوان أو صاحب الطلب" aria-label="بحث">
+      <select id="scS" aria-label="الحالة"></select><select id="scP" aria-label="الأولوية"></select><select id="scC" aria-label="التصنيف"></select><select id="scA" aria-label="المسؤول"></select>
+      <label>من <input type="date" id="scD1"></label><label>إلى <input type="date" id="scD2"></label>
+      <button type="button" class="btn btn-o" id="scRst">مسح التصفية</button>
+    </form>
+    <p class="sc-cnt" id="scCnt"></p>
+    <div class="sc-list" id="scList"></div>
+  </div>
+  <div id="scKb" hidden></div>
+  <div class="sc-dlg" id="scDlg" role="dialog" aria-modal="true" aria-label="تفاصيل التذكرة" hidden><div class="sc-dw" id="scDw" tabindex="-1"></div></div>
+</div></main>
+
+<main id="adm16" class="bgm bl" aria-label="المحافظات والمناطق والتغطية الجغرافية"><div class="wrap">
+  <div class="sc-top"><div><h1>المحافظات والمناطق</h1><p class="sc-sub">ADM16 — مراجعة المواقع المسجلة في الإعلانات والخدمات والأنشطة. كل الأرقام محسوبة من البيانات الفعلية فقط.</p></div><a class="btn btn-o sc-back" href="#admin">رجوع للوحة الإدارة</a></div>
+  <div class="gx-tabs" role="tablist" aria-label="أقسام المركز الجغرافي"><button type="button" role="tab" class="on" data-gx="rg" aria-selected="true">المناطق</button><button type="button" role="tab" data-gx="dq" aria-selected="false">جودة البيانات</button><button type="button" role="tab" data-gx="rq" aria-selected="false">المتطلبات للمرحلة القادمة</button></div>
+  <div class="sc-state" id="gxState" role="status" aria-live="polite"><p>لم يتم ربط مصدر بيانات المواقع بعد. يتطلب ذلك ربط <b>BAHR_ADM16.mount</b> من app.js.</p></div>
+  <div id="gxNotes"></div>
+  <div id="gxRg" hidden>
+    <section class="sc-kpis" id="gxKpis" aria-label="ملخص المواقع"></section>
+    <form class="sc-f" id="gxF" role="search" aria-label="بحث وتصفية المناطق" onsubmit="return false">
+      <input type="search" id="gxQ" placeholder="ابحث باسم المحافظة أو المدينة أو المنطقة" aria-label="بحث">
+      <select id="gxL" aria-label="المستوى"><option value="">كل المستويات</option><option value="gov">محافظات</option><option value="city">مدن وأقضية</option><option value="area">مناطق وأحياء</option></select>
+      <select id="gxK" aria-label="نوع السجل"></select>
+      <select id="gxS" aria-label="الحالة" hidden><option value="">كل الحالات</option><option value="on">مفعّلة</option><option value="off">موقوفة</option></select>
+      <select id="gxO" aria-label="الترتيب"><option value="n">الاسم</option><option value="c">الأكثر سجلات</option></select>
+      <button type="button" class="btn btn-o" id="gxRst">مسح التصفية</button>
+    </form>
+    <p class="sc-cnt" id="gxCnt"></p>
+    <div class="sc-list" id="gxList"></div>
+    <nav class="gx-pg" id="gxPg" aria-label="الصفحات"></nav>
+  </div>
+  <div id="gxDq" hidden></div>
+  <div id="gxRq" hidden>
+    <div class="sc-note"><b>ما يحتاجه هذا المركز ليعمل بالكامل — توثيق فقط، لم يُنفَّذ في ADM16:</b></div>
+    <ol class="gx-req">
+      <li>أعمدة موقع في جداول الإعلانات والخدمات والأنشطة (محافظة، مدينة/قضاء، منطقة) بأسماء متفق عليها.</li>
+      <li>جدول مرجعي للمحافظات والمناطق (اسم، مستوى، الأب، حالة تفعيل) يضيفه المدير ولا يُفترض من الكود.</li>
+      <li>حقل «تغطية مفعّلة» منفصل عن اسم المنطقة المكتوب في الإعلان، وسياسة RLS تسمح للمدير فقط بتعديله.</li>
+      <li>دالة أو واجهة خلفية لتوحيد الأسماء بعد موافقة المشرف على اقتراحات الدمج (لا دمج تلقائي).</li>
+      <li>إحداثيات حقيقية (lat/lng) إن أُريدت الخرائط، مع تقريب الموقع العام لحماية الخصوصية. الخرائط مؤجلة لمرحلة لاحقة.</li>
+      <li>تعديل البحث العام (المحافظة والمدينة والمنطقة) ليقرأ من الجدول المرجعي بدل نصوص حرة، وفهارس على هذه الأعمدة.</li>
+    </ol>
+  </div>
+  <div class="sc-dlg" id="gxDlg" role="dialog" aria-modal="true" aria-label="تفاصيل المنطقة" hidden><div class="sc-dw" id="gxDw" tabindex="-1"></div></div>
+</div></main>
+<main id="adm19" class="bgm bl" aria-label="مركز الأمان ومراقبة المخاطر"><div class="wrap">
+  <div class="sc-top"><div><h1>مركز الأمان ومراقبة المخاطر</h1><p class="sc-sub">ADM19 — كل الأرقام محسوبة من البيانات الفعلية فقط. المؤشرات هنا «تحتاج إلى مراجعة» وليست مخالفات مؤكدة.</p></div><a class="btn btn-o sc-back" href="#admin">رجوع للوحة الإدارة</a></div>
+  <div class="gx-tabs" role="tablist" aria-label="أقسام مركز الأمان"><button type="button" role="tab" class="on" data-sx="cs" aria-selected="true">الحالات</button><button type="button" role="tab" data-sx="ix" aria-selected="false">المؤشرات</button><button type="button" role="tab" data-sx="lg" aria-selected="false">السجل</button><button type="button" role="tab" data-sx="rq" aria-selected="false">الفحص والمتطلبات</button></div>
+  <div class="sc-state" id="sxState" role="status" aria-live="polite"><p>لم يتم ربط مصدر بيانات الأمان بعد. يتطلب ذلك ربط <b>BAHR_ADM19.mount</b> من app.js.</p></div>
+  <div id="sxBody" hidden>
+    <section class="sc-kpis" id="sxKpis" aria-label="مؤشرات الأمان"></section>
+    <div id="sxCs">
+      <form class="sc-f" id="sxF" role="search" aria-label="بحث وتصفية الحالات" onsubmit="return false">
+        <input type="search" id="sxQ" placeholder="ابحث برقم الحالة أو عنوانها" aria-label="بحث">
+        <select id="sxS" aria-label="الحالة"></select><select id="sxP" aria-label="الأولوية"></select><select id="sxC" aria-label="النوع"></select>
+        <label>من<input type="date" id="sxD1"></label><label>إلى<input type="date" id="sxD2"></label>
+      </form>
+      <p class="sc-note" id="sxCnt"></p><div id="sxList"></div>
+    </div>
+    <div id="sxIx" hidden></div>
+    <div id="sxLg" hidden></div>
+    <div id="sxRq" hidden></div>
+  </div>
+  <div class="sc-dlg" id="sxDlg" role="dialog" aria-modal="true" aria-label="تفاصيل الحالة" hidden><div class="sc-dw" id="sxDw" tabindex="-1"></div></div>
+</div></main>
+<main id="adm20" class="bgm bl" aria-label="مركز الترويج والإعلانات المميزة والحملات"><div class="wrap">
+  <div class="sc-top"><div><h1>مركز الترويج والحملات التجارية</h1><p class="sc-sub">ADM20 — الإعلانات المميزة وطلبات الترويج والحملات والرعايات. لا يظهر هنا إلا ما هو مخزّن ومقاس فعلياً، وغير ذلك يظهر «غير متاح حالياً».</p></div><a class="btn btn-o sc-back" href="#admin">رجوع للوحة الإدارة</a></div>
+  <div class="gx-tabs" role="tablist" aria-label="أقسام مركز الترويج"><button type="button" role="tab" class="on" data-pm="ov" aria-selected="true">الملخص</button><button type="button" role="tab" data-pm="rq" aria-selected="false">طلبات الترويج</button><button type="button" role="tab" data-pm="ft" aria-selected="false">المميزة</button><button type="button" role="tab" data-pm="cp" aria-selected="false">الحملات والرعايات</button><button type="button" role="tab" data-pm="pr" aria-selected="false">الأسعار</button><button type="button" role="tab" data-pm="an" aria-selected="false">القياس</button><button type="button" role="tab" data-pm="nd" aria-selected="false">المتطلبات</button></div>
+  <div class="sc-state" id="pmState" role="status" aria-live="polite"><p>لم يتم ربط مصدر البيانات بعد. يتطلب ذلك ربط <b>BAHR_ADM20.mount</b> من app.js.</p></div>
+  <div id="pmBody" hidden>
+    <section class="sc-kpis" id="pmKpis" aria-label="ملخص الترويج"></section>
+    <div id="pmPanes"></div>
+  </div>
+</div></main>
+<main id="adm21" class="bgm bl" aria-label="مركز التقييمات والمراجعات وسمعة الأنشطة"><div class="wrap">
+  <div class="sc-top"><div><h1>مركز التقييمات وسمعة الأنشطة</h1><p class="sc-sub">ADM21 — المراجعات والبلاغات والاعتراضات. لا تُعرض هنا تقييمات أو متوسطات إلا إذا كانت مخزّنة فعلياً.</p></div><a class="btn btn-o sc-back" href="#admin">رجوع للوحة الإدارة</a></div>
+  <div class="gx-tabs" role="tablist" aria-label="أقسام مركز التقييمات"><button type="button" role="tab" class="on" data-rv="ov" aria-selected="true">الملخص</button><button type="button" role="tab" data-rv="rw" aria-selected="false">المراجعات</button><button type="button" role="tab" data-rv="ob" aria-selected="false">الاعتراضات</button><button type="button" role="tab" data-rv="po" aria-selected="false">السياسة (مسودة)</button><button type="button" role="tab" data-rv="tr" aria-selected="false">الموثوقية والسمعة</button><button type="button" role="tab" data-rv="nd" aria-selected="false">المتطلبات</button></div>
+  <div class="sc-state" id="rvState" role="status" aria-live="polite"><p>لم يتم ربط مصدر البيانات بعد. يتطلب ذلك ربط <b>BAHR_ADM21.mount</b> من app.js.</p></div>
+  <div id="rvBody" hidden><section class="sc-kpis" id="rvKpis" aria-label="ملخص التقييمات"></section><div id="rvPanes"></div></div>
+</div></main>
+<main id="adm22" class="bgm bl" aria-label="مركز إدارة الإشعارات والتنبيهات"><div class="wrap">
+  <div class="sc-top"><div><h1>مركز الإشعارات والتنبيهات</h1><p class="sc-sub">ADM22 — إشعارات المستخدمين وتنبيهات الإدارة وقواعدها وقنواتها. لا تُعرض هنا إلا بيانات مخزّنة فعلياً، ولا تُرسل رسائل من هذه الصفحة.</p></div><a class="btn btn-o sc-back" href="#admin">رجوع للوحة الإدارة</a></div>
+  <div class="gx-tabs" role="tablist" aria-label="أقسام مركز الإشعارات"><button type="button" role="tab" class="on" data-nt="ov" aria-selected="true">الملخص</button><button type="button" role="tab" data-nt="nl" aria-selected="false">الإشعارات</button><button type="button" role="tab" data-nt="ty" aria-selected="false">الأنواع</button><button type="button" role="tab" data-nt="ru" aria-selected="false">القواعد</button><button type="button" role="tab" data-nt="ch" aria-selected="false">القنوات</button><button type="button" role="tab" data-nt="nd" aria-selected="false">المتطلبات</button></div>
+  <div class="sc-state" id="ntState" role="status" aria-live="polite"><p>لم يتم ربط مصدر البيانات بعد. يتطلب ذلك ربط <b>BAHR_ADM22.mount</b> من app.js.</p></div>
+  <div id="ntBody" hidden><section class="sc-kpis" id="ntKpis" aria-label="ملخص الإشعارات"></section><div id="ntPanes"></div></div>
+  <div class="sc-dlg" id="ntDlg" role="dialog" aria-modal="true" aria-label="تفاصيل الإشعار" hidden><div class="sc-dw" id="ntDw" tabindex="-1"></div></div>
+</div></main>
+<main id="adm23" class="bgm bl" aria-label="مركز إدارة المحادثات والتواصل"><div class="wrap">
+  <div class="sc-top"><div><h1>مركز المحادثات والتواصل</h1><p class="sc-sub">ADM23 — دعم الإدارة وبلاغات المحادثات وجاهزية الميزات المتقدمة. محادثات المشتري والبائع خاصة، ولا تعرض هذه الصفحة محتوى أي رسالة.</p></div><a class="btn btn-o sc-back" href="#admin">رجوع للوحة الإدارة</a></div>
+  <div class="gx-tabs" role="tablist" aria-label="أقسام مركز المحادثات"><button type="button" role="tab" class="on" data-cv="ov" aria-selected="true">الملخص</button><button type="button" role="tab" data-cv="su" aria-selected="false">الدعم</button><button type="button" role="tab" data-cv="rp" aria-selected="false">بلاغات المحادثات</button><button type="button" role="tab" data-cv="pv" aria-selected="false">الخصوصية</button><button type="button" role="tab" data-cv="fu" aria-selected="false">الميزات المتقدمة</button><button type="button" role="tab" data-cv="nd" aria-selected="false">المتطلبات</button></div>
+  <div class="sc-state" id="cvState" role="status" aria-live="polite"><p>لم يتم ربط مصدر البيانات بعد. يتطلب ذلك ربط <b>BAHR_ADM23.mount</b> من app.js.</p></div>
+  <div id="cvBody" hidden><section class="sc-kpis" id="cvKpis" aria-label="ملخص المحادثات"></section><div id="cvPanes"></div></div>
+</div></main>
+<main id="adm24" class="bgm bl" aria-label="مركز العضويات والحسابات التجارية"><div class="wrap">
+  <div class="sc-top"><div><h1>العضويات والحسابات التجارية</h1><p class="sc-sub">ADM24 — أنواع الحسابات والمزايا التجارية والفصل بين العضوية والتحقق والترويج. لا توجد خطط أو أسعار أو مدفوعات هنا، وكل رقم من بيانات فعلية فقط.</p></div><a class="btn btn-o sc-back" href="#admin">رجوع للوحة الإدارة</a></div>
+  <div class="gx-tabs" role="tablist" aria-label="أقسام مركز العضويات"><button type="button" role="tab" class="on" data-mb="ov" aria-selected="true">الملخص</button><button type="button" role="tab" data-mb="ty" aria-selected="false">أنواع الحسابات</button><button type="button" role="tab" data-mb="ms" aria-selected="false">العضويات والمزايا</button><button type="button" role="tab" data-mb="bz" aria-selected="false">الأنشطة التجارية</button><button type="button" role="tab" data-mb="sp" aria-selected="false">الفصل بين المفاهيم</button><button type="button" role="tab" data-mb="nd" aria-selected="false">المتطلبات</button></div>
+  <div class="sc-state" id="mbState" role="status" aria-live="polite"><p>لم يتم ربط مصدر البيانات بعد. يتطلب ذلك ربط <b>BAHR_ADM24.mount</b> من app.js.</p></div>
+  <div id="mbBody" hidden><section class="sc-kpis" id="mbKpis" aria-label="ملخص العضويات"></section><div id="mbPanes"></div></div>
+</div></main>
+
+
+
+
+
+
+
+<main id="adm25" class="bgm bl" aria-label="مركز التقارير والإحصائيات التنفيذية"><div class="wrap">
+  <div class="sc-top"><div><h1>مركز التقارير والإحصائيات التنفيذية</h1><p class="sc-sub">ADM25 — كل رقم محسوب من بيانات المنصة الفعلية. ما لا يمكن قياسه يظهر «غير متاح حالياً» ولا تُخمَّن قيمته. التواريخ بتوقيت بغداد (UTC+3).</p></div><a class="btn btn-o sc-back" href="#admin">رجوع للوحة الإدارة</a></div>
+  <form class="sc-f rp-f" id="rpF" onsubmit="return false" aria-label="الفترة الزمنية">
+    <label>الفترة<select id="rpR"><option value="1">اليوم</option><option value="7">آخر 7 أيام</option><option value="30" selected>آخر 30 يوماً</option><option value="m">الشهر الحالي</option><option value="c">فترة محددة</option></select></label>
+    <label class="rp-c" hidden>من<input type="date" id="rpD1"></label><label class="rp-c" hidden>إلى<input type="date" id="rpD2"></label>
+    <button type="button" class="btn btn-p" id="rpGo">تحديث التقرير</button>
+  </form>
+  <p class="sc-cnt" id="rpPer" role="status"></p>
+  <div class="gx-tabs" role="tablist" aria-label="أقسام التقارير"><button type="button" role="tab" class="on" data-rp="ov" aria-selected="true">الملخص</button><button type="button" role="tab" data-rp="ad" aria-selected="false">الإعلانات</button><button type="button" role="tab" data-rp="us" aria-selected="false">المستخدمون والأنشطة</button><button type="button" role="tab" data-rp="en" aria-selected="false">التفاعل والتواصل</button><button type="button" role="tab" data-rp="mk" aria-selected="false">التسويق</button><button type="button" role="tab" data-rp="rv" aria-selected="false">الإيرادات</button><button type="button" role="tab" data-rp="nd" aria-selected="false">المتطلبات</button></div>
+  <div class="sc-state" id="rpState" role="status" aria-live="polite"><p>جارٍ تهيئة مركز التقارير…</p></div>
+  <div id="rpBody" hidden><section class="sc-kpis" id="rpKpis" aria-label="المؤشرات الرئيسية"></section><div id="rpPane"></div></div>
+</div></main>
+
+<main id="adm27" class="bgm bl" aria-label="جودة المنصة والاختبارات"><div class="wrap">
+  <div class="sc-top"><div><h1>جودة المنصة والاختبارات</h1><p class="sc-sub">ADM27 — فحوصات تُنفَّذ فعلياً في متصفحك عند التشغيل، للقراءة فقط: لا إنشاء بيانات ولا حذف ولا إرسال. لا تُعرض نتيجة لم تُفحص، وما يتعذر فحصه مذكور في تبويب «لم يتم التحقق منه».</p></div><a class="btn btn-o sc-back" href="#admin">رجوع للوحة الإدارة</a></div>
+  <div class="sc-state" id="qaState" role="status" aria-live="polite"><p>جارٍ التحقق من الصلاحية…</p></div>
+  <div id="qaBody" hidden>
+    <div class="rp-hd"><button type="button" class="btn btn-p" id="qaRun">تشغيل كل الفحوصات</button><span class="sc-cnt" id="qaProg" role="status" aria-live="polite"></span></div>
+    <div class="gx-tabs" role="tablist" aria-label="أقسام مركز الجودة"><button type="button" role="tab" class="on" data-qa="sum" aria-selected="true">ملخص الاختبارات</button><button type="button" role="tab" data-qa="chk" aria-selected="false">الفحوصات</button><button type="button" role="tab" data-qa="iss" aria-selected="false">المشكلات المكتشفة</button><button type="button" role="tab" data-qa="hist" aria-selected="false">سجل الاختبارات</button><button type="button" role="tab" data-qa="nv" aria-selected="false">لم يتم التحقق منه</button></div>
+    <div id="qaPane"></div>
+  </div>
+  <div class="sc-dlg" id="qaDlg" role="dialog" aria-modal="true" aria-label="تفاصيل المشكلة" hidden><div class="sc-dw" id="qaDw" tabindex="-1"></div></div>
+</div></main>
+<main id="adm29" class="bgm bl" aria-label="الخصومات والكوبونات"><div class="wrap">
+<div class="sc-top"><div><h1>الخصومات والكوبونات</h1><p class="sc-sub">ADM29 — الخصومات العامة على الإعلانات والكوبونات. التحقق والصلاحيات في قاعدة البيانات، ولا يظهر هنا إلا ما هو مخزّن فعلاً.</p></div><a class="btn btn-o sc-back" href="#admin">رجوع للوحة الإدارة</a></div>
+<div class="gx-tabs" role="tablist" aria-label="أقسام الخصومات"><button type="button" role="tab" class="on" data-dt="pub" aria-selected="true">الخصومات العامة</button><button type="button" role="tab" data-dt="cp" aria-selected="false">الكوبونات</button><button type="button" role="tab" data-dt="au" aria-selected="false">سجل التغييرات</button></div>
+<div id="dcMsg" role="status" aria-live="polite"></div><div id="dcBody"></div>
+</div></main>
+<main id="adm28" class="bgm bl" aria-label="مركز الأداء والسرعة"><div class="wrap">
+  <div class="sc-top"><div><h1>مركز الأداء والسرعة</h1><p class="sc-sub">ADM28 — قياسات حقيقية من متصفحك عند الضغط على «تشغيل فحص الأداء» فقط، وهي تخص جهازك واتصالك الحاليين. ليست مراقبة مستمرة لزوار الموقع، ولا يُجرى فحص تلقائي على الموقع الحي.</p></div><a class="btn btn-o sc-back" href="#admin">رجوع للوحة الإدارة</a></div>
+  <div class="sc-state" id="pfState" role="status" aria-live="polite"><p>جارٍ التحقق من الصلاحية…</p></div>
+  <div id="pfBody" hidden>
+    <div class="rp-hd"><button type="button" class="btn btn-p" id="pfRun">تشغيل فحص الأداء</button><span class="sc-cnt" id="pfProg" role="status" aria-live="polite"></span></div>
+    <div class="gx-tabs" role="tablist" aria-label="أقسام مركز الأداء"><button type="button" role="tab" class="on" data-pf="sum" aria-selected="true">الملخص</button><button type="button" role="tab" data-pf="pg" aria-selected="false">الصفحات والبحث</button><button type="button" role="tab" data-pf="res" aria-selected="false">الموارد</button><button type="button" role="tab" data-pf="img" aria-selected="false">الصور</button><button type="button" role="tab" data-pf="rec" aria-selected="false">فرص التحسين</button><button type="button" role="tab" data-pf="hist" aria-selected="false">السجل</button><button type="button" role="tab" data-pf="lim" aria-selected="false">حدود القياس</button></div>
+    <div id="pfPane"></div>
+  </div>
+  <div class="sc-dlg" id="pfDlg" role="dialog" aria-modal="true" aria-label="تفاصيل التوصية" hidden><div class="sc-dw" id="pfDw" tabindex="-1"></div></div>
+</div></main>
+<div id="toast" role="status" aria-live="polite"></div>
+
+
+<div id="intro" role="dialog" aria-modal="true" aria-label="أهلاً بك في بحر" hidden>
+<video id="inV" muted playsinline webkit-playsinline preload="none" poster="bahr-intro-poster.jpg" aria-hidden="true"><source src="bahr-intro.webm" type="video/webm"><source src="bahr-intro.mp4" type="video/mp4"></video>
+<div class="in-t"><img class="in-logo" src="logo-white.png" alt="بحر" onerror="this.style.display='none'">
+<div class="in-bot"><p class="in-cap"><b>بحر</b>… كل شي يخص البحر بمكان واحد.</p>
+<button class="in-go" id="inGo" type="button">الدخول إلى بحر</button>
+<button class="in-rp" id="inRp" type="button">مشكلة في تشغيل الفيديو؟ أبلغنا</button></div></div>
+<div class="in-bar" aria-hidden="true"><i id="inBar"></i></div></div>
+
+
+
+
+
+
+<!-- 4) منطق التطبيق (يُحمَّل أخيراً بعد بناء الواجهة) -->
+<!-- ===== ADM15: مركز الدعم — واجهة وعرض فقط. البيانات والحفظ يوفّرهما app.js عبر BAHR_ADM15.mount ===== -->
+<script>
+(function(){
+var ST=[['new','جديدة'],['in_progress','قيد المعالجة'],['waiting_user','بانتظار رد المستخدم'],['waiting_tech','بانتظار فريق تقني'],['resolved','تم الحل'],['closed','مغلقة']];
+var PR=[['urgent','عاجل'],['high','مرتفع'],['medium','متوسط'],['low','منخفض']];
+var CT=[['account','تسجيل الدخول أو الحساب'],['listing','نشر إعلان أو تعديل بياناته'],['upload','رفع الصور والملفات'],['messages','الرسائل والتواصل'],['verification','التوثيق أو مراجعة الإعلان'],['feature','صفحة أو وظيفة داخل المنصة'],['suggestion','اقتراح تطوير'],['other','مشكلة أخرى']];
+var cfg=null,data={tickets:[],articles:[],staff:[]},cur=null,$=function(i){return document.getElementById(i)};
+function el(t,a,k){var e=document.createElement(t);if(a)for(var n in a){if(n==='class')e.className=a[n];else if(n==='text')e.textContent=a[n];else e.setAttribute(n,a[n])}
+ (k||[]).forEach(function(c){if(c!=null)e.appendChild(typeof c==='string'?document.createTextNode(c):c)});return e}
+function lab(l,v){if(v==null||v==='')return '—';for(var i=0;i<l.length;i++)if(l[i][0]===v)return l[i][1];return String(v)}
+function dt(x){if(!x)return '—';var d=new Date(x);return isNaN(d)?'—':d.toLocaleString('ar-IQ',{dateStyle:'medium',timeStyle:'short'})}
+function dur(ms){var m=Math.round(ms/60000);if(m<60)return m+' دقيقة';var h=m/60;if(h<48)return h.toFixed(1)+' ساعة';return (h/24).toFixed(1)+' يوم'}
+function safeUrl(u){return typeof u==='string'&&/^(https:\/\/|\/|[a-z0-9_\-.]+\.[a-z0-9]+$)/i.test(u)?u:null}
+function opts(sel,first,list){sel.textContent='';sel.appendChild(el('option',{value:'',text:first}));list.forEach(function(x){sel.appendChild(el('option',{value:x[0],text:x[1]}))})}
+function cats(){return (cfg&&cfg.categories)||CT}
+function isOpen(t){return t.status!=='resolved'&&t.status!=='closed'}
+function state(msg,err){var s=$('scState');s.textContent='';s.className='sc-state'+(err?' err':'');s.hidden=!msg;if(!msg)return;s.appendChild(el('p',{text:msg}));
+ if(err&&cfg&&cfg.load)s.appendChild(el('button',{type:'button',class:'btn btn-p',text:'إعادة المحاولة'})).addEventListener('click',refresh)}
+function kpi(label,val,note){return el('div',{class:'sc-k'},[el('b',{text:String(val)}),el('span',{text:label}),note?el('small',{text:note}):null])}
+function kpis(){var T=data.tickets,box=$('scKpis');box.textContent='';var n=function(s){return T.filter(function(t){return t.status===s}).length};
+ var now=Date.now(),withDue=T.filter(function(t){return t.due_at&&isOpen(t)}),late=withDue.filter(function(t){return new Date(t.due_at)<now}).length;
+ var tech=(cfg&&cfg.techCategories)||['feature','upload'];
+ var hi=T.filter(function(t){return isOpen(t)&&(t.priority==='urgent'||t.priority==='high')&&(tech.indexOf(t.category)>-1||t.status==='waiting_tech')}).length;
+ box.appendChild(kpi('جديدة',n('new')));box.appendChild(kpi('قيد المعالجة',n('in_progress')));box.appendChild(kpi('بانتظار رد المستخدم',n('waiting_user')));
+ box.appendChild(kpi('متأخرة',withDue.length?late:'—',withDue.length?'من '+withDue.length+' تذكرة لها موعد':'لا توجد مواعيد مسجلة'));
+ box.appendChild(kpi('محلولة ومغلقة',n('resolved')+n('closed'),'محلولة '+n('resolved')+' · مغلقة '+n('closed')));
+ box.appendChild(kpi('تقنية عالية الأولوية',hi,'عاجل/مرتفع غير مغلقة'));
+ var r=T.filter(function(t){return t.created_at&&t.first_response_at}).map(function(t){return new Date(t.first_response_at)-new Date(t.created_at)}).filter(function(x){return x>=0});
+ var s=T.filter(function(t){return t.created_at&&t.resolved_at}).map(function(t){return new Date(t.resolved_at)-new Date(t.created_at)}).filter(function(x){return x>=0});
+ var avg=function(a){return a.reduce(function(p,c){return p+c},0)/a.length};
+ box.appendChild(kpi('متوسط وقت الاستجابة',r.length?dur(avg(r)):'غير متاح',r.length?'من '+r.length+' تذكرة':'الطوابع الزمنية غير متوفرة'));
+ box.appendChild(kpi('متوسط وقت الحل',s.length?dur(avg(s)):'غير متاح',s.length?'من '+s.length+' تذكرة':'الطوابع الزمنية غير متوفرة'))}
+function filt(){var q=$('scQ').value.trim().toLowerCase(),S=$('scS').value,P=$('scP').value,C=$('scC').value,A=$('scA').value,d1=$('scD1').value,d2=$('scD2').value;
+ return data.tickets.filter(function(t){
+  if(q&&[t.number,t.id,t.title,t.requester].join(' ').toLowerCase().indexOf(q)<0)return false;
+  if(S&&t.status!==S)return false;if(P&&t.priority!==P)return false;if(C&&t.category!==C)return false;
+  if(A&&(A==='_none'?!!t.assignee:t.assignee!==A))return false;
+  var c=t.created_at?new Date(t.created_at):null;
+  if(d1&&(!c||c<new Date(d1+'T00:00:00')))return false;if(d2&&(!c||c>new Date(d2+'T23:59:59')))return false;return true})
+ .sort(function(a,b){return new Date(b.updated_at||b.created_at||0)-new Date(a.updated_at||a.created_at||0)})}
+function list(){var f=filt(),box=$('scList');box.textContent='';$('scCnt').textContent=data.tickets.length?('عرض '+f.length+' من '+data.tickets.length+' تذكرة'):'';
+ if(!data.tickets.length){box.appendChild(el('p',{class:'sc-empty',text:'لا توجد تذاكر دعم في النظام حالياً.'}));return}
+ if(!f.length){box.appendChild(el('p',{class:'sc-empty',text:'لا توجد تذاكر مطابقة للتصفية.'}));return}
+ f.forEach(function(t){var b=el('button',{type:'button',class:'sc-r'},[
+  el('span',{class:'sc-n',text:'#'+(t.number||t.id||'—')}),el('b',{class:'sc-t',text:t.title||'(بدون عنوان)'}),
+  el('span',{class:'sc-m',text:(t.requester||'—')+' · '+lab(cats(),t.category)}),
+  el('span',{class:'sc-bd st-'+t.status,text:lab(ST,t.status)}),el('span',{class:'sc-bd pr-'+t.priority,text:lab(PR,t.priority)}),
+  el('span',{class:'sc-m',text:'آخر تحديث: '+dt(t.updated_at||t.created_at)}),el('span',{class:'sc-m',text:t.assignee?('المسؤول: '+t.assignee):'غير معيّن'})]);
+  b.addEventListener('click',function(){openT(t.id)});box.appendChild(b)})}
+function filters(){opts($('scS'),'كل الحالات',ST);opts($('scP'),'كل الأولويات',PR);opts($('scC'),'كل التصنيفات',cats());
+ var names=[],seen={};data.tickets.forEach(function(t){if(t.assignee&&!seen[t.assignee]){seen[t.assignee]=1;names.push([t.assignee,t.assignee])}});
+ opts($('scA'),'كل المسؤولين',[['_none','غير معيّن']].concat(names))}
+function msg(box,ok,text){box.className='sc-msg '+(ok?'ok':'bad');box.textContent=text}
+function act(box,fn,okText){box.className='sc-msg';box.textContent='جارٍ التنفيذ…';
+ Promise.resolve().then(fn).then(function(r){if(r&&r.ok===false)throw new Error(r.error||'');msg(box,true,okText);return refresh(true).then(function(){var id=cur;openT(id);var b=$('scDw').querySelector('.sc-msg');if(b)msg(b,true,okText)})})
+ .catch(function(e){msg(box,false,'لم يتم الحفظ'+(e&&e.message?': '+e.message:'.'))})}
+function sel(list,val,first){var s=el('select');if(first)s.appendChild(el('option',{value:'',text:first}));list.forEach(function(x){var o=el('option',{value:x[0],text:x[1]});if(x[0]===val)o.selected=true;s.appendChild(o)});return s}
+function openT(id){var t=data.tickets.filter(function(x){return String(x.id)===String(id)})[0];if(!t)return;cur=t.id;var w=$('scDw'),can=(cfg&&cfg.can)||{};w.textContent='';
+ var x=el('button',{type:'button',class:'sc-x','aria-label':'إغلاق',text:'×'});x.addEventListener('click',closeT);
+ w.appendChild(x);w.appendChild(el('h2',{text:'#'+(t.number||t.id)+' — '+(t.title||'')}));
+ w.appendChild(el('div',{class:'sc-meta'},[['صاحب الطلب',t.requester],['التصنيف',lab(cats(),t.category)],['الحالة',lab(ST,t.status)],['الأولوية',lab(PR,t.priority)],['المسؤول',t.assignee||'غير معيّن'],['أُنشئت',dt(t.created_at)],['آخر تحديث',dt(t.updated_at)],['الموعد',t.due_at?dt(t.due_at):'غير مسجّل']].map(function(m){return el('div',{},[el('small',{text:m[0]}),el('b',{text:m[1]||'—'})])})));
+ var lk=t.linked;if(lk&&lk.label){var u=safeUrl(lk.href);w.appendChild(el('p',{class:'sc-lk'},['مرتبطة بـ ('+(lk.type||'عنصر')+'): ',u?el('a',{href:u,text:lk.label}):lk.label]))}
+ w.appendChild(el('h3',{text:'وصف المشكلة الأصلي'}));w.appendChild(el('p',{class:'sc-desc',text:t.description||'لا يوجد وصف.'}));
+ w.appendChild(el('h3',{text:'المرفقات'}));var at=t.attachments||[];
+ w.appendChild(at.length?el('ul',{class:'sc-at'},at.map(function(a){var u=safeUrl(a.url);return el('li',{},[u?el('a',{href:u,target:'_blank',rel:'noopener',text:a.name||'مرفق'}):(a.name||'مرفق')])})):el('p',{class:'sc-empty',text:'لا توجد مرفقات.'}));
+ w.appendChild(el('h3',{text:'سجل الردود والملاحظات'}));var rp=t.replies||[];
+ w.appendChild(rp.length?el('div',{class:'sc-th'},rp.map(function(r){return el('div',{class:'sc-rp '+(r.internal?'int':'pub')},[el('small',{text:(r.internal?'ملاحظة داخلية — لا تظهر للمستخدم':'رد ظاهر للمستخدم')+' · '+(r.author||'—')+' · '+dt(r.at)}),el('p',{text:r.body||''})])})):el('p',{class:'sc-empty',text:'لا توجد ردود بعد.'}));
+ w.appendChild(el('h3',{text:'سجل الإجراءات'}));var ac=t.actions||[];
+ w.appendChild(ac.length?el('ul',{class:'sc-ac'},ac.map(function(a){return el('li',{text:dt(a.at)+' — '+(a.by||'—')+': '+(a.text||'')})})):el('p',{class:'sc-empty',text:'لا يوجد سجل إجراءات متاح لهذه التذكرة.'}));
+ var box=el('div',{class:'sc-msg',role:'status'});
+ if(cfg&&(cfg.onStatus||cfg.onPriority||cfg.onAssign)){w.appendChild(el('h3',{text:'الإجراءات'}));var g=el('div',{class:'sc-ctl'});
+  if(cfg.onStatus&&can.status!==false){var s1=sel(ST,t.status);var b1=el('button',{type:'button',class:'btn btn-p',text:'تحديث الحالة'});b1.addEventListener('click',function(){act(box,function(){return cfg.onStatus(t.id,s1.value)},'تم تحديث الحالة.')});g.appendChild(el('div',{},[el('label',{text:'الحالة'}),s1,b1]))}
+  if(cfg.onPriority&&can.priority!==false){var s2=sel(PR,t.priority),rs=el('input',{type:'text',placeholder:'سبب التغيير (مستحسن)','aria-label':'سبب تغيير الأولوية'});var b2=el('button',{type:'button',class:'btn btn-p',text:'تحديث الأولوية'});b2.addEventListener('click',function(){act(box,function(){return cfg.onPriority(t.id,s2.value,rs.value.trim())},'تم تحديث الأولوية.')});g.appendChild(el('div',{},[el('label',{text:'الأولوية'}),s2,rs,b2]))}
+  if(cfg.onAssign&&can.assign&&data.staff.length){var s3=sel(data.staff.map(function(p){return [p.id,p.name]}),t.assigneeId||'', 'غير معيّن');var b3=el('button',{type:'button',class:'btn btn-p',text:'تعيين'});b3.addEventListener('click',function(){act(box,function(){return cfg.onAssign(t.id,s3.value||null)},'تم تحديث التعيين.')});g.appendChild(el('div',{},[el('label',{text:'المسؤول'}),s3,b3]))}
+  w.appendChild(g)}
+ if(cfg&&(cfg.onReply||cfg.onNote)){w.appendChild(el('h3',{text:'رد أو ملاحظة'}));var ta=el('textarea',{rows:'3','aria-label':'نص الرد'});var kind=el('select',{'aria-label':'نوع الرد'});
+  if(cfg.onReply)kind.appendChild(el('option',{value:'pub',text:'رد يراه المستخدم'}));if(cfg.onNote)kind.appendChild(el('option',{value:'int',text:'ملاحظة داخلية فقط'}));
+  var bs=el('button',{type:'button',class:'btn btn-p',text:'إرسال'});bs.addEventListener('click',function(){var v=ta.value.trim();if(!v){msg(box,false,'اكتب النص أولاً.');return}
+   act(box,function(){return kind.value==='int'?cfg.onNote(t.id,v):cfg.onReply(t.id,v)},kind.value==='int'?'تم حفظ الملاحظة الداخلية.':'تم إرسال الرد.')});
+  w.appendChild(el('div',{class:'sc-rf'},[kind,ta,bs]))}
+ else w.appendChild(el('p',{class:'sc-note',text:'الرد والملاحظات الداخلية غير مفعّلة: لا توجد آلية حفظ مربوطة بعد.'}));
+ w.appendChild(box);$('scDlg').hidden=false;document.body.classList.add('sc-lock');w.focus()}
+function closeT(){$('scDlg').hidden=true;document.body.classList.remove('sc-lock');cur=null}
+function kb(){var box=$('scKb');box.textContent='';var A=data.articles||[];
+ box.appendChild(el('p',{class:'sc-note',text:'المقالات المعتمدة فقط تُنشر. المسودات والنصوص التجريبية لا تُعرض كحلول معتمدة.'}));
+ if(!cfg||!cfg.onSaveArticle)box.appendChild(el('p',{class:'sc-note warn',text:'حفظ ونشر المقالات غير متاح: يتطلب جدول مقالات ودالة/سياسة حفظ ونشر في الخلفية. الواجهة جاهزة للعرض فقط.'}));
+ if(!A.length){box.appendChild(el('p',{class:'sc-empty',text:'لا توجد مقالات محفوظة.'}));return}
+ A.forEach(function(a){var pub=a.status==='published';box.appendChild(el('article',{class:'sc-art'},[el('h3',{text:a.title||''}),el('span',{class:'sc-bd '+(pub?'st-resolved':'st-new'),text:pub?'منشورة':'مسودة'}),el('p',{text:a.body||''}),
+  (a.steps&&a.steps.length)?el('ol',{},a.steps.map(function(s){return el('li',{text:s})})):null,el('small',{text:'آخر تحديث: '+dt(a.updated_at)})]))})}
+function refresh(keep){if(!cfg||!cfg.load){state('لم يتم ربط مصدر بيانات الدعم بعد.');return Promise.resolve()}
+ if(!keep)state('جارٍ تحميل بيانات الدعم…');
+ return Promise.resolve().then(cfg.load).then(function(r){r=r||{};data.tickets=r.tickets||[];data.articles=r.articles||[];data.staff=r.staff||[];state('');$('scTk').hidden=$('scTabCur')==='kb';
+  var on=document.querySelector('.sc-tabs .on').getAttribute('data-sc');$('scTk').hidden=on!=='tk';$('scKb').hidden=on!=='kb';filters();kpis();list();kb()})
+ .catch(function(e){state('تعذّر تحميل بيانات الدعم'+(e&&e.message?': '+e.message:'.'),true);$('scTk').hidden=true;$('scKb').hidden=true})}
+function init(){var f=$('scF');if(!f||f.__i)return;f.__i=1;['scQ','scS','scP','scC','scA','scD1','scD2'].forEach(function(i){$(i).addEventListener('input',list)});
+ $('scRst').addEventListener('click',function(){f.reset();list()});
+ Array.prototype.forEach.call(document.querySelectorAll('.sc-tabs button'),function(b){b.addEventListener('click',function(){Array.prototype.forEach.call(document.querySelectorAll('.sc-tabs button'),function(x){var o=x===b;x.classList.toggle('on',o);x.setAttribute('aria-selected',o)});
+  var k=b.getAttribute('data-sc'),ok=!$('scState').textContent||$('scState').hidden;$('scTk').hidden=!(ok&&k==='tk');$('scKb').hidden=!(ok&&k==='kb')})});
+ $('scDlg').addEventListener('click',function(e){if(e.target===this)closeT()});document.addEventListener('keydown',function(e){if(e.key==='Escape'&&!$('scDlg').hidden)closeT()})}
+init();
+window.BAHR_ADM15={mount:function(c){cfg=c||null;init();return refresh()},refresh:refresh,
+ STATUSES:ST,PRIORITIES:PR,CATEGORIES:CT};
+})();
+</script>
+
+<!-- ===== ADM16: المحافظات والمناطق — عرض ومراجعة فقط. البيانات يوفّرها app.js عبر BAHR_ADM16.mount ===== -->
+<script>
+(function(){
+var KD=[['boat','القوارب'],['engine','المحركات'],['jetski','الجت سكي'],['parts','قطع الغيار'],['accessory','الإكسسوارات'],['jackpot','الجاكبوت'],['service','الخدمات'],['business','الأنشطة التجارية']];
+var LV={gov:'محافظة',city:'مدينة/قضاء',area:'منطقة/حي'},PG=20;
+var cfg=null,D={records:[],regions:[]},rows=[],Q={},page=1,$=function(i){return document.getElementById(i)};
+function el(t,a,k){var e=document.createElement(t);if(a)for(var n in a){if(n==='class')e.className=a[n];else if(n==='text')e.textContent=a[n];else e.setAttribute(n,a[n])}
+ (k||[]).forEach(function(c){if(c!=null)e.appendChild(typeof c==='string'?document.createTextNode(c):c)});return e}
+function kl(v){for(var i=0;i<KD.length;i++)if(KD[i][0]===v)return KD[i][1];return v||'—'}
+function norm(s){return String(s==null?'':s).replace(/[\u064B-\u0652\u0640]/g,'').replace(/[أإآٱ]/g,'ا').replace(/[يىی]/g,'ي').replace(/ة/g,'ه').replace(/ک/g,'ك').replace(/\s+/g,' ').trim().replace(/^ال/,'').toLowerCase()}
+function clean(s){return s==null?'':String(s).replace(/\s+/g,' ').trim()}
+function lev(a,b){if(a===b)return 0;if(Math.abs(a.length-b.length)>1)return 2;var p=[],i,j;for(j=0;j<=b.length;j++)p[j]=j;
+ for(i=1;i<=a.length;i++){var c=[i];for(j=1;j<=b.length;j++)c[j]=Math.min(p[j]+1,c[j-1]+1,p[j-1]+(a[i-1]===b[j-1]?0:1));p=c}return p[b.length]}
+function state(m,err){var s=$('gxState');s.textContent='';s.className='sc-state'+(err?' err':'');s.hidden=!m;if(!m)return;s.appendChild(el('p',{text:m}));
+ if(err&&cfg&&cfg.load)s.appendChild(el('button',{type:'button',class:'btn btn-p',text:'إعادة المحاولة'})).addEventListener('click',refresh)}
+function hasCo(r){return r.has_coords===true||(r.lat!=null&&r.lng!=null&&r.lat!==''&&r.lng!=='')}
+function isAct(r){return r&&typeof r.active==='boolean'}
+/* بناء الشجرة من السجلات الفعلية فقط، ومطابقة المناطق المرجعية إن وُجدت */
+function build(){
+ var map={},R=D.records;
+ function node(level,names,raw){var key=level+'|'+names.map(norm).join('>');var n=map[key];
+  if(!n){n=map[key]={key:key,level:level,path:names.slice(),var:{},count:0,kinds:{},recs:[],region:null};}
+  n.var[raw]=(n.var[raw]||0)+1;return n}
+ R.forEach(function(r){var g=clean(r.governorate),c=clean(r.city),a=clean(r.area);
+  var parts=[g,c,a];
+  function add(level,names,raw){var n=node(level,names,raw);n.count++;n.kinds[r.kind]=(n.kinds[r.kind]||0)+1;n.recs.push(r)}
+  if(g)add('gov',[g],g);
+  if(g&&c)add('city',[g,c],c);
+  if(a)add('area',[g,c,a].filter(Boolean),a)});
+ var regs=D.regions||[];
+ regs.forEach(function(g){if(!g||!g.name)return;var lvl=g.level||'gov';
+  var path=g.path&&g.path.length?g.path:[g.name];var key=lvl+'|'+path.map(norm).join('>');
+  var n=map[key];if(!n)n=map[key]={key:key,level:lvl,path:path.slice(),var:{},count:0,kinds:{},recs:[],region:null};n.region=g});
+ rows=Object.keys(map).map(function(k){var n=map[k];
+  var best='',bc=-1;Object.keys(n.var).forEach(function(v){if(n.var[v]>bc){bc=n.var[v];best=v}});
+  n.name=n.region&&n.region.name?n.region.name:(best||n.path[n.path.length-1]);
+  n.display=n.path.length>1?n.path.slice(0,-1).join(' ← ')+' ← '+n.name:n.name;return n})}
+function kpi(l,v,n){return el('div',{class:'sc-k'},[el('b',{text:String(v)}),el('span',{text:l}),n?el('small',{text:n}):null])}
+function kpis(){var b=$('gxKpis');b.textContent='';var R=D.records;
+ var cnt=function(l){return rows.filter(function(n){return n.level===l&&(n.count>0||n.region)}).length};
+ var noG=R.filter(function(r){return !clean(r.governorate)}).length,noA=R.filter(function(r){return clean(r.governorate)&&!clean(r.area)}).length;
+ var co=R.filter(hasCo).length;
+ b.appendChild(kpi('محافظات',cnt('gov')));b.appendChild(kpi('مدن وأقضية',cnt('city')));b.appendChild(kpi('مناطق وأحياء',cnt('area')));
+ b.appendChild(kpi('سجلات مرتبطة بموقع',R.length-noG,'من أصل '+R.length+' سجل'));
+ b.appendChild(kpi('بلا محافظة',noG));b.appendChild(kpi('بمحافظة وبلا منطقة',noA));
+ var kinds=KD.map(function(k){var c=R.filter(function(r){return r.kind===k[0]}).length;return c?k[1]+' '+c:null}).filter(Boolean);
+ b.appendChild(kpi('حسب النوع',kinds.length?'':'—',kinds.join(' · ')||'لا توجد سجلات'));
+ b.appendChild(kpi('إحداثيات حقيقية',co,co?'سجل فيه إحداثيات':'لا توجد إحداثيات — الخرائط مؤجلة'))}
+function filt(){var q=norm($('gxQ').value),L=$('gxL').value,K=$('gxK').value,S=$('gxS').value,O=$('gxO').value;
+ var f=rows.filter(function(n){if(L&&n.level!==L)return false;if(K&&!n.kinds[K])return false;
+  if(q&&norm(n.display+' '+Object.keys(n.var).join(' ')).indexOf(q)<0)return false;
+  if(S){if(!isAct(n.region))return false;if((S==='on')!==n.region.active)return false}return true});
+ f.sort(function(a,b){return O==='c'?(b.count-a.count)||a.name.localeCompare(b.name,'ar'):a.display.localeCompare(b.display,'ar')});return f}
+function list(){var f=filt(),box=$('gxList');box.textContent='';var pages=Math.max(1,Math.ceil(f.length/PG));if(page>pages)page=pages;
+ $('gxCnt').textContent=rows.length?('عرض '+f.length+' من '+rows.length+' موقع'):'';
+ if(!rows.length){box.appendChild(el('p',{class:'sc-empty',text:'لا توجد مواقع مسجلة في بيانات الإعلانات والخدمات حالياً.'}));$('gxPg').textContent='';return}
+ if(!f.length){box.appendChild(el('p',{class:'sc-empty',text:'لا توجد نتائج مطابقة.'}));$('gxPg').textContent='';return}
+ f.slice((page-1)*PG,page*PG).forEach(function(n){
+  var vs=Object.keys(n.var).length;
+  var b=el('button',{type:'button',class:'sc-r gx-r'},[el('span',{class:'sc-n',text:LV[n.level]||n.level}),el('b',{class:'sc-t',text:n.display}),
+   el('span',{class:'sc-bd',text:n.count+' سجل'}),
+   isAct(n.region)?el('span',{class:'sc-bd '+(n.region.active?'st-resolved':'st-closed'),text:n.region.active?'مفعّلة':'موقوفة'}):el('span',{class:'sc-bd',text:'الحالة غير متاحة'}),
+   el('span',{class:'sc-m',text:Object.keys(n.kinds).map(function(k){return kl(k)+' '+n.kinds[k]}).join(' · ')||'لا سجلات مرتبطة'}),
+   vs>1?el('span',{class:'sc-m gx-w',text:'⚠ '+vs+' طرق كتابة'}):null]);
+  b.addEventListener('click',function(){openR(n.key)});box.appendChild(b)});
+ var pg=$('gxPg');pg.textContent='';if(pages>1)for(var i=1;i<=pages;i++){(function(i){var x=el('button',{type:'button',class:i===page?'on':'',text:String(i),'aria-label':'صفحة '+i});x.addEventListener('click',function(){page=i;list()});pg.appendChild(x)})(i)}}
+function openR(key){var n=rows.filter(function(x){return x.key===key})[0];if(!n)return;var w=$('gxDw');w.textContent='';
+ var x=el('button',{type:'button',class:'sc-x','aria-label':'إغلاق',text:'×'});x.addEventListener('click',closeR);w.appendChild(x);
+ w.appendChild(el('h2',{text:n.display}));
+ w.appendChild(el('div',{class:'sc-meta'},[['المستوى',LV[n.level]],['عدد السجلات',n.count],['حالة التغطية',isAct(n.region)?(n.region.active?'مفعّلة':'موقوفة'):'غير متاحة'],['طرق الكتابة',Object.keys(n.var).length]].map(function(m){return el('div',{},[el('small',{text:m[0]}),el('b',{text:String(m[1]||0)})])})));
+ w.appendChild(el('h3',{text:'طرق الكتابة الموجودة'}));
+ w.appendChild(Object.keys(n.var).length?el('ul',{class:'sc-ac'},Object.keys(n.var).map(function(v){return el('li',{text:'«'+v+'» — '+n.var[v]+' سجل'})})):el('p',{class:'sc-empty',text:'لا توجد سجلات تستخدم هذا الاسم.'}));
+ w.appendChild(el('h3',{text:'السجلات المرتبطة (الاسم العام فقط، دون عناوين دقيقة)'}));
+ var rs=n.recs.slice(0,100);
+ w.appendChild(rs.length?el('ul',{class:'sc-ac'},rs.map(function(r){return el('li',{text:kl(r.kind)+' — '+(r.title||'(بدون عنوان)')})})):el('p',{class:'sc-empty',text:'لا توجد سجلات.'}));
+ if(n.recs.length>100)w.appendChild(el('p',{class:'sc-note',text:'عُرض أول 100 من '+n.recs.length+' سجل.'}));
+ var box=el('div',{class:'sc-msg',role:'status'});
+ if(cfg&&cfg.onToggleRegion&&isAct(n.region)){var nx=!n.region.active;
+  w.appendChild(el('h3',{text:'التغطية'}));w.appendChild(el('p',{class:'sc-note',text:'تغيير التغطية لا يحذف المنطقة ولا الإعلانات المرتبطة بها. اسم المنطقة المكتوب في الإعلان لا يعني بالضرورة أن المنصة تقدّم خدمة فعلية فيها.'}));
+  var b=el('button',{type:'button',class:'btn '+(nx?'btn-p':'btn-o'),text:nx?'تفعيل المنطقة':'إيقاف المنطقة'});
+  b.addEventListener('click',function(){if(!confirm((nx?'تفعيل ':'إيقاف ')+'المنطقة «'+n.name+'»؟ لن يُحذف أي إعلان.'))return;
+   box.className='sc-msg';box.textContent='جارٍ التنفيذ…';
+   Promise.resolve().then(function(){return cfg.onToggleRegion(n.region.id,nx)}).then(function(r){if(r&&r.ok===false)throw new Error(r.error||'');
+    return refresh(true).then(function(){openR(key);var m=$('gxDw').querySelector('.sc-msg');if(m){m.className='sc-msg ok';m.textContent=nx?'تم تفعيل المنطقة.':'تم إيقاف المنطقة.'}})})
+   .catch(function(e){box.className='sc-msg bad';box.textContent='لم يتم الحفظ'+(e&&e.message?': '+e.message:'.')})});
+  w.appendChild(b)}
+ else w.appendChild(el('p',{class:'sc-note',text:'تفعيل المناطق وإيقافها غير متاح: لا توجد بيانات تغطية مربوطة بعد.'}));
+ w.appendChild(box);$('gxDlg').hidden=false;document.body.classList.add('sc-lock');w.focus()}
+function closeR(){$('gxDlg').hidden=true;document.body.classList.remove('sc-lock')}
+function sect(t,sub,items,emptyMsg,cap){var s=el('section',{class:'gx-q'},[el('h3',{text:t+' ('+items.length+')'}),sub?el('p',{class:'sc-sub',text:sub}):null]);
+ if(!items.length)s.appendChild(el('p',{class:'sc-empty',text:emptyMsg||'لا توجد حالات.'}));
+ else{s.appendChild(el('ul',{class:'sc-ac'},items.slice(0,cap||60).map(function(x){return el('li',{text:x})})));if(items.length>(cap||60))s.appendChild(el('p',{class:'sc-note',text:'عُرض أول '+(cap||60)+' من '+items.length+'.'}))}return s}
+function dq(){var b=$('gxDq');b.textContent='';var R=D.records;
+ b.appendChild(el('p',{class:'sc-note',text:'هذه قائمة مراجعة فقط. لا يُعدَّل أي سجل ولا يُدمج شيء تلقائياً.'}));
+ b.appendChild(sect('سجلات بلا محافظة','',R.filter(function(r){return !clean(r.governorate)}).map(function(r){return kl(r.kind)+' — '+(r.title||'(بدون عنوان)')}),'كل السجلات فيها محافظة.'));
+ b.appendChild(sect('سجلات بمحافظة وبلا منطقة','',R.filter(function(r){return clean(r.governorate)&&!clean(r.area)}).map(function(r){return kl(r.kind)+' — '+(r.title||'(بدون عنوان)')+' ('+clean(r.governorate)+')'}),'كل السجلات فيها منطقة.'));
+ var vars=rows.filter(function(n){return Object.keys(n.var).length>1}).map(function(n){return LV[n.level]+': '+n.display+' ← '+Object.keys(n.var).map(function(v){return '«'+v+'» ×'+n.var[v]}).join('، ')});
+ b.appendChild(sect('اختلاف كتابة الاسم نفسه','أسماء تتطابق بعد تجاهل التشكيل والهمزات والتاء المربوطة وأل التعريف.',vars,'لا توجد أسماء مكتوبة بطرق مختلفة.'));
+ var sim=[];if(rows.length<=600){var by={};rows.forEach(function(n){if(n.count>0){var k=n.level+'|'+n.path.slice(0,-1).map(norm).join('>');(by[k]=by[k]||[]).push(n)}});
+  Object.keys(by).forEach(function(k){var a=by[k];for(var i=0;i<a.length;i++)for(var j=i+1;j<a.length;j++){var x=norm(a[i].name),y=norm(a[j].name);
+   if(x!==y&&x.length>=4&&y.length>=4&&lev(x,y)<=1)sim.push(LV[a[i].level]+': «'+a[i].name+'» (' +a[i].count+') قريب من «'+a[j].name+'» ('+a[j].count+') — يحتاج قرار المشرف')}})}
+ b.appendChild(sect('أسماء متشابهة محتملة (اقتراحات)',rows.length>600?'تعذّر الفحص: عدد المواقع كبير.':'اقتراحات للمراجعة فقط، وقد تكون مناطق مختلفة فعلاً.',sim,rows.length>600?'تعذّر الفحص.':'لا توجد أسماء متشابهة.'));
+ var govs=(D.regions||[]).filter(function(g){return (g.level||'gov')==='gov'});
+ if(govs.length){var ok={};govs.forEach(function(g){ok[norm(g.name)]=1});
+  b.appendChild(sect('سجلات بمحافظة غير معروفة','المقارنة مع قائمة المحافظات المرجعية الموجودة في النظام.',R.filter(function(r){var g=clean(r.governorate);return g&&!ok[norm(g)]}).map(function(r){return kl(r.kind)+' — '+(r.title||'')+' («'+clean(r.governorate)+'»)'}),'كل المحافظات المسجلة معروفة.'));
+  b.appendChild(sect('مناطق مرجعية بلا أي سجل','',rows.filter(function(n){return n.region&&n.count===0}).map(function(n){return LV[n.level]+': '+n.display}),'كل المناطق المرجعية مرتبطة بسجل.'))}
+ else b.appendChild(el('section',{class:'gx-q'},[el('h3',{text:'سجلات بمحافظة غير معروفة / مناطق بلا سجلات'}),el('p',{class:'sc-note warn',text:'تعذّر التحقق: لا توجد قائمة محافظات مرجعية في النظام للمقارنة معها.'})]))}
+function notes(l){var b=$('gxNotes');b.textContent='';(l||[]).forEach(function(t){b.appendChild(el('p',{class:'sc-note warn',text:t}))})}
+function tab(k){Array.prototype.forEach.call(document.querySelectorAll('.gx-tabs button'),function(x){var o=x.getAttribute('data-gx')===k;x.classList.toggle('on',o);x.setAttribute('aria-selected',o)});
+ var ok=$('gxState').hidden;$('gxRg').hidden=!(ok&&k==='rg');$('gxDq').hidden=!(ok&&k==='dq');$('gxRq').hidden=k!=='rq'}
+function refresh(keep){if(!cfg||!cfg.load){state('لم يتم ربط مصدر بيانات المواقع بعد.');return Promise.resolve()}
+ if(!keep)state('جارٍ تحميل بيانات المواقع…');
+ return Promise.resolve().then(cfg.load).then(function(r){r=r||{};D.records=r.records||[];D.regions=r.regions||[];notes(r.notes);
+  if(!D.records.length&&!D.regions.length)state('لا توجد بيانات مواقع في النظام حتى الآن. لا يتوفر مصدر مرتبط، أو الجداول لا تحتوي سجلات.');else state('');
+  build();var kk=$('gxK');kk.textContent='';kk.appendChild(el('option',{value:'',text:'كل الأنواع'}));KD.forEach(function(k){kk.appendChild(el('option',{value:k[0],text:k[1]}))});
+  $('gxS').hidden=!rows.some(function(n){return isAct(n.region)});kpis();list();dq();
+  tab(document.querySelector('.gx-tabs .on').getAttribute('data-gx'))})
+ .catch(function(e){state('تعذّر تحميل بيانات المواقع'+(e&&e.message?': '+e.message:'.'),true);$('gxRg').hidden=true;$('gxDq').hidden=true})}
+function init(){var f=$('gxF');if(!f||f.__i)return;f.__i=1;['gxQ','gxL','gxK','gxS','gxO'].forEach(function(i){$(i).addEventListener('input',function(){page=1;list()})});
+ $('gxRst').addEventListener('click',function(){f.reset();page=1;list()});
+ Array.prototype.forEach.call(document.querySelectorAll('.gx-tabs button'),function(b){b.addEventListener('click',function(){tab(b.getAttribute('data-gx'))})});
+ $('gxDlg').addEventListener('click',function(e){if(e.target===this)closeR()});document.addEventListener('keydown',function(e){if(e.key==='Escape'&&!$('gxDlg').hidden)closeR()})}
+init();
+window.BAHR_ADM16={mount:function(c){cfg=c||null;init();return refresh()},refresh:refresh,KINDS:KD};
+})();
+</script>
+
+<script src="security-center.js"></script>
+<script src="promo-center.js"></script>
+<script src="reviews-center.js"></script>
+<script src="notif-center.js"></script>
+<script src="chat-center.js"></script>
+<script src="members-center.js"></script>
+<script src="b7-addons.js"></script>
+<script src="b7-views.js"></script>
+<script src="app.js"></script>
+<script src="services-center.js"></script>
+<script src="service-offerings.js"></script>
+<script src="service-reviews.js"></script>
+<script src="service-center.js"></script>
+<script src="service-hours.js"></script>
+<script src="business-profile-center.js"></script>
+<script src="chat-world.js"></script>
+<script src="chat-mod.js"></script>
+<script src="reports-center.js"></script>
+<script src="bahr-track.js"></script>
+<script src="qa-center.js"></script>
+<script src="perf-center.js"></script><script src="disc-center.js"></script><script src="disc-public.js"></script><script src="disc-offers.js"></script>
+<script src="b15-filters.js"></script>
+<script src="b15-suggest.js"></script>
+<script src="b22-welcome.js"></script>
+<script src="b22-nearby.js"></script>
+<script src="b22-weather.js"></script>
+<script src="b22-follow.js"></script>
+<script src="b22-follow-person.js"></script>
+<script src="b22-follow-list.js"></script>
+<script src="bottom-nav.js"></script>
+<script src="b4-market.js"></script>
+<script src="b5-inbox.js"></script>
+<script src="b6-wallet.js"></script>
+<script src="b22-livegps.js" defer></script>
+</body>
+</html>
